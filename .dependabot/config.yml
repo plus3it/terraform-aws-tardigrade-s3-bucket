@@ -5,3 +5,23 @@ update_configs:
   - package_manager: "terraform"
     directory: "/"
     update_schedule: "daily"
+
+  - package_manager: "terraform"
+    directory: "/tests/create_bucket"
+    update_schedule: "daily"
+
+  - package_manager: "terraform"
+    directory: "/tests/no_bucket"
+    update_schedule: "daily"
+
+  - package_manager: "terraform"
+    directory: "/tests/create_policy"
+    update_schedule: "daily"
+
+  - package_manager: "terraform"
+    directory: "/tests/sse_policy"
+    update_schedule: "daily"
+
+  - package_manager: "go:modules"
+    directory: "/tests"
+    update_schedule: "daily"
