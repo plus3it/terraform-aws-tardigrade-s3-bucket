@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+### 1.0.3
+
+**Released**: 2019.11.07
+
+**Commit Delta**: [Change from 1.0.2 release](https://github.com/plus3it/terraform-aws-tardigrade-s3-bucket/compare/1.0.2...1.0.3)
+
+**Summary**:
+
+*   Add force_destroy option to prevent errors when trying to destroy the bucket
+
 ### 1.0.2
 
 **Released**: 2019.10.28
