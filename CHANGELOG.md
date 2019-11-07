@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+### 1.0.4
+
+**Released**: 2019.11.07
+
+**Commit Delta**: [Change from 1.0.3 release](https://github.com/plus3it/terraform-aws-tardigrade-s3-bucket/compare/1.0.3...1.0.4)
+
+**Summary**:
+
+*   Testing framework now checks if "*.tf" files exist within the directory before attempting to run the test
+
 ### 1.0.3
 
 **Released**: 2019.11.07
