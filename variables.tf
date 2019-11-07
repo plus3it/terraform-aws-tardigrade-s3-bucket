@@ -37,6 +37,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "force_destroy" {
+  description = "boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error"
+  type        = bool
+  default     = false
+}
+
 variable "server_side_encryption_configuration" {
   description = "A schema for the server side encryption configuration"
   type        = list
