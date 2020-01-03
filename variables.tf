@@ -44,7 +44,23 @@ variable "force_destroy" {
 }
 
 variable "server_side_encryption_configuration" {
-  description = "A schema for the server side encryption configuration"
+  description = "A list of schema objects for the server side encryption configuration"
   type        = list
   default     = []
+}
+
+variable "public_access_block" {
+  description = "A schema object for the S3 bucket public access block policy"
+  type = object({
+    block_public_acls       = bool
+    block_public_policy     = bool
+    ignore_public_acls      = bool
+    restrict_public_buckets = bool
+  })
+  default = {
+    block_public_acls       = true
+    block_public_policy     = true
+    ignore_public_acls      = true
+    restrict_public_buckets = true
+  }
 }
