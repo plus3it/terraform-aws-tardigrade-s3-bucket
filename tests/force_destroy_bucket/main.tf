@@ -23,7 +23,7 @@ module "create_bucket" {
 }
 
 resource "aws_s3_bucket_object" "this" {
-  bucket = module.create_bucket.bucket_id
+  bucket = module.create_bucket.bucket.id
   key    = random_id.name.hex
   source = "${path.module}/main.tf"
   etag   = filemd5("${path.module}/main.tf")

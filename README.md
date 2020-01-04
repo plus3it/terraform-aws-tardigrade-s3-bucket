@@ -21,7 +21,5 @@ Terraform module to create a S3 bucket
 
 | Name | Description |
 |------|-------------|
-| bucket\_arn | The Amazon Resource Name of the bucket |
-| bucket\_id | The name of the bucket |
-| bucket\_region | The region in which the bucket was created |
+| bucket | AWS S3 Bucket object |
 
