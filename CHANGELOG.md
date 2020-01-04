@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+### 1.1.1
+
+**Released**: 2020.01.03
+
+**Commit Delta**: [Change from 1.1.0 release](https://github.com/plus3it/terraform-aws-tardigrade-s3-bucket/compare/1.1.0...1.1.1)
+
+**Summary**:
+
+*   Gets bucket region from the caller by default
+
 ### 1.1.0
 
 **Released**: 2020.01.03
