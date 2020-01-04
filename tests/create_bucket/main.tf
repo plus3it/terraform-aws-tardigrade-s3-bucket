@@ -35,3 +35,11 @@ module "create_bucket_null_region" {
     environment = "testing"
   }
 }
+
+output "create_bucket" {
+  value = module.create_bucket
+}
+
+output "create_bucket_null_region" {
+  value = module.create_bucket_null_region
+}

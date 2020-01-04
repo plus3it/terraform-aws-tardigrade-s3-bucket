@@ -13,3 +13,7 @@ module "no_bucket" {
   region        = null
 
 }
+
+output "no_bucket" {
+  value = module.no_bucket
+}
