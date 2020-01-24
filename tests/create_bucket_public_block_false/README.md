@@ -1,11 +1,10 @@
-# sse-policy
+# create-bucket-public-block-false
 
 <!-- BEGIN TFDOCS -->
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
 | random | n/a |
 
 ## Inputs
