@@ -19,7 +19,7 @@ Terraform module to create a S3 bucket
 | create\_bucket | Controls whether to create a bucket | `bool` | `true` | no |
 | force\_destroy | boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error | `bool` | `false` | no |
 | policy | An IAM policy document in JSON format to apply to the bucket | `string` | `""` | no |
-| public\_access\_block | A schema object for the S3 bucket public access block policy | <pre>object({<br>    block_public_acls       = bool<br>    block_public_policy     = bool<br>    ignore_public_acls      = bool<br>    restrict_public_buckets = bool<br>  })<br></pre> | <pre>{<br>  "block_public_acls": true,<br>  "block_public_policy": true,<br>  "ignore_public_acls": true,<br>  "restrict_public_buckets": true<br>}<br></pre> | no |
+| public\_access\_block | A schema object for the S3 bucket public access block policy | <pre>object({<br>    block_public_acls       = bool<br>    block_public_policy     = bool<br>    ignore_public_acls      = bool<br>    restrict_public_buckets = bool<br>  })</pre> | <pre>{<br>  "block_public_acls": true,<br>  "block_public_policy": true,<br>  "ignore_public_acls": true,<br>  "restrict_public_buckets": true<br>}</pre> | no |
 | server\_side\_encryption\_configuration | A list of schema objects for the server side encryption configuration | `list` | `[]` | no |
 | tags | The tags applied to the bucket | `map(string)` | `{}` | no |
 | versioning | The state of versioning of the bucket | `bool` | `false` | no |
