@@ -14,3 +14,6 @@
 # tardigrade-ci
 .tardigrade-ci
 tardigrade-ci/
+
+# MacOS
+.DS_Store
