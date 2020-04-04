@@ -1,6 +1,10 @@
 # force-destroy-bucket
 
 <!-- BEGIN TFDOCS -->
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
