@@ -1,6 +1,10 @@
 # create-bucket-public-block-false
 
 <!-- BEGIN TFDOCS -->
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
