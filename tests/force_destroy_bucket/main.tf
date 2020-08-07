@@ -15,7 +15,6 @@ module "create_bucket" {
 
   create_bucket = true
   bucket        = random_id.name.hex
-  region        = "us-east-1"
   tags = {
     environment = "testing"
   }

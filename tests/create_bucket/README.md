@@ -24,6 +24,5 @@ No input.
 | Name | Description |
 |------|-------------|
 | create\_bucket | n/a |
-| create\_bucket\_null\_region | n/a |
 
 <!-- END TFDOCS -->

@@ -32,7 +32,6 @@ module "create_policy" {
   create_bucket = "true"
   bucket        = random_id.name.hex
   policy        = join("", data.template_file.this.*.rendered)
-  region        = "us-east-1"
   tags = {
     environment = "testing"
   }
