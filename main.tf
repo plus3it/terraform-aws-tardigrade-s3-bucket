@@ -1,5 +1,3 @@
-provider "aws" {}
-
 resource "aws_s3_bucket" "this" {
   count = var.create_bucket ? 1 : 0
 
