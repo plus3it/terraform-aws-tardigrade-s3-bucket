@@ -10,7 +10,6 @@ module "no_bucket" {
 
   create_bucket = false
   bucket        = null
-  region        = null
 
 }
 

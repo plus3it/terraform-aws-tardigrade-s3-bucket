@@ -1,5 +1,6 @@
 provider "aws" {
-  region = "us-east-1"
+  version = "~> 2.7"
+  region  = "us-east-1"
 }
 
 resource "random_id" "name" {
@@ -7,7 +8,7 @@ resource "random_id" "name" {
   prefix      = "tardigrade-s3-bucket-"
 }
 
-module "create_bucket" {
+module "create_bucket_v2" {
   source = "../../"
   providers = {
     aws = aws
@@ -20,6 +21,6 @@ module "create_bucket" {
   }
 }
 
-output "create_bucket" {
-  value = module.create_bucket
+output "create_bucket_v2" {
+  value = module.create_bucket_v2
 }

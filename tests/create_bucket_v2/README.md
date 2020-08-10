@@ -8,6 +8,7 @@ Terraform module to create a S3 bucket
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12 |
+| aws | ~> 2.7 |
 
 ## Providers
 
@@ -23,6 +24,6 @@ No input.
 
 | Name | Description |
 |------|-------------|
-| create\_bucket | n/a |
+| create\_bucket\_v2 | n/a |
 
 <!-- END TFDOCS -->

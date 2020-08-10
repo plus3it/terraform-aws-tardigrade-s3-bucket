@@ -43,12 +43,6 @@ variable "public_access_block" {
   }
 }
 
-variable "region" {
-  description = "Region where the bucket will reside"
-  type        = string
-  default     = null
-}
-
 variable "server_side_encryption_configuration" {
   description = "A list of schema objects for the server side encryption configuration"
   type        = list
