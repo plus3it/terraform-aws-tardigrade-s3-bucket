@@ -3,12 +3,10 @@ provider "aws" {
 }
 
 locals {
-  create_bucket = "true"
-  partition     = "aws"
+  partition = "aws"
 }
 
 data "template_file" "this" {
-  count = local.create_bucket ? 1 : 0
 
   template = file("${path.module}/templates/config_bucket_policy.json")
 
@@ -29,9 +27,8 @@ module "create_policy" {
     aws = aws
   }
 
-  create_bucket = "true"
-  bucket        = random_id.name.hex
-  policy        = join("", data.template_file.this.*.rendered)
+  bucket = random_id.name.hex
+  policy = join("", data.template_file.this.*.rendered)
   tags = {
     environment = "testing"
   }

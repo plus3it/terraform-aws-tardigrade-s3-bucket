@@ -1,15 +1,15 @@
-# create-bucket-public-block-false
+# no-bucket
 
 <!-- BEGIN TFDOCS -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.13 |
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| random | n/a |
+No provider.
 
 ## Inputs
 
@@ -17,6 +17,8 @@ No input.
 
 ## Outputs
 
-No output.
+| Name | Description |
+|------|-------------|
+| no\_bucket | n/a |
 
 <!-- END TFDOCS -->

@@ -14,8 +14,7 @@ module "create_bucket" {
     aws = aws
   }
 
-  create_bucket = "true"
-  bucket        = random_id.name.hex
+  bucket = random_id.name.hex
 
   public_access_block = {
     block_public_acls       = false

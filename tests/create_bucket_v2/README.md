@@ -7,7 +7,7 @@ Terraform module to create a S3 bucket
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12 |
+| terraform | >= 0.13 |
 | aws | ~> 2.7 |
 
 ## Providers
