@@ -1,9 +1,3 @@
-variable "create_bucket" {
-  description = "Controls whether to create a bucket"
-  type        = bool
-  default     = true
-}
-
 variable "bucket" {
   description = "The name of the bucket"
   type        = string

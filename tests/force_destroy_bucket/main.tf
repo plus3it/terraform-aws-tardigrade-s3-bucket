@@ -13,8 +13,7 @@ module "create_bucket" {
     aws = aws
   }
 
-  create_bucket = true
-  bucket        = random_id.name.hex
+  bucket = random_id.name.hex
   tags = {
     environment = "testing"
   }
