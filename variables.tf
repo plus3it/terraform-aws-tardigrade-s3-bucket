@@ -15,6 +15,17 @@ variable "force_destroy" {
   default     = false
 }
 
+variable "grants" {
+  description = "An ACL policy grant. Conflicts with `acl`, which must be set to `null`"
+  type = list(object({
+    id          = string
+    type        = string
+    permissions = list(string)
+    uri         = string
+  }))
+  default = null
+}
+
 variable "policy" {
   description = "An IAM policy document in JSON format to apply to the bucket"
   type        = string
