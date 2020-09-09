@@ -24,7 +24,7 @@ resource "aws_s3_bucket" "this" {
   }
 
   dynamic "grant" {
-    for_each = try(length(var.grants), 0) == 0 || try(length(var.acl), 0) > 0 ? [] : var.grants
+    for_each = var.acl == null && length(var.grants) > 0 ? var.grants : []
 
     content {
       id          = grant.value.id

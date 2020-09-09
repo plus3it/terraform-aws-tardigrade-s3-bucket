@@ -16,14 +16,14 @@ variable "force_destroy" {
 }
 
 variable "grants" {
-  description = "An ACL policy grant. Conflicts with `acl`, which must be set to `null`"
+  description = "A list of ACL policy grants. Conflicts with `acl`, which must be set to `null`"
   type = list(object({
     id          = string
     type        = string
     permissions = list(string)
     uri         = string
   }))
-  default = null
+  default = []
 }
 
 variable "policy" {
