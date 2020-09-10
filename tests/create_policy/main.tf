@@ -26,7 +26,7 @@ module "create_policy" {
   providers = {
     aws = aws
   }
-
+  acl    = "private"
   bucket = random_id.name.hex
   policy = join("", data.template_file.this.*.rendered)
   tags = {

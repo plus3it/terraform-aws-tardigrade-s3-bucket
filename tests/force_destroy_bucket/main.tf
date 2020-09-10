@@ -13,6 +13,7 @@ module "create_bucket" {
     aws = aws
   }
 
+  acl    = "private"
   bucket = random_id.name.hex
   tags = {
     environment = "testing"

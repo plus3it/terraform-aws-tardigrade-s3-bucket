@@ -6,13 +6,24 @@ variable "bucket" {
 variable "acl" {
   description = "The canned ACL the bucket will use"
   type        = string
-  default     = "private"
+  default     = null
 }
 
 variable "force_destroy" {
   description = "boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error"
   type        = bool
   default     = false
+}
+
+variable "grants" {
+  description = "A list of ACL policy grants. Conflicts with `acl`, which must be set to `null`"
+  type = list(object({
+    id          = string
+    type        = string
+    permissions = list(string)
+    uri         = string
+  }))
+  default = []
 }
 
 variable "policy" {

@@ -22,6 +22,18 @@ resource "aws_s3_bucket" "this" {
       }
     }
   }
+
+  dynamic "grant" {
+
+    for_each = var.grants
+
+    content {
+      id          = grant.value.id
+      type        = grant.value.type
+      permissions = grant.value.permissions
+      uri         = grant.value.uri
+    }
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {
