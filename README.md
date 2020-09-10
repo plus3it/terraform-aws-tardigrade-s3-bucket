@@ -20,7 +20,7 @@ Terraform module to create a S3 bucket
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | bucket | The name of the bucket | `string` | n/a | yes |
-| acl | The canned ACL the bucket will use | `string` | `"private"` | no |
+| acl | The canned ACL the bucket will use | `string` | `null` | no |
 | force\_destroy | boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error | `bool` | `false` | no |
 | grants | A list of ACL policy grants. Conflicts with `acl`, which must be set to `null` | <pre>list(object({<br>    id          = string<br>    type        = string<br>    permissions = list(string)<br>    uri         = string<br>  }))</pre> | `[]` | no |
 | policy | An IAM policy document in JSON format to apply to the bucket | `string` | `""` | no |
