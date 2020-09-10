@@ -9,7 +9,7 @@ resource "random_id" "name" {
   prefix      = "tardigrade-s3-bucket-"
 }
 
-module "create_bucket" {
+module "create_grants" {
   source = "../../"
   providers = {
     aws = aws
@@ -38,5 +38,5 @@ module "create_bucket" {
 }
 
 output "create_bucket" {
-  value = module.create_bucket
+  value = module.create_grants
 }

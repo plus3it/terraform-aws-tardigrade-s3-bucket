@@ -6,7 +6,7 @@ variable "bucket" {
 variable "acl" {
   description = "The canned ACL the bucket will use"
   type        = string
-  default     = "private"
+  default     = null
 }
 
 variable "force_destroy" {

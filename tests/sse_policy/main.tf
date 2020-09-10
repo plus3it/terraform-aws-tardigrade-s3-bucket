@@ -17,6 +17,7 @@ module "sse_policy" {
     aws = aws
   }
 
+  acl    = "private"
   bucket = random_id.name.hex
   tags = {
     environment = "testing"
