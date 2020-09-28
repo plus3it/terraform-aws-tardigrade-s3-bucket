@@ -17,3 +17,6 @@ tardigrade-ci/
 
 # MacOS
 .DS_Store
+
+# terratest
+tests/go.*
