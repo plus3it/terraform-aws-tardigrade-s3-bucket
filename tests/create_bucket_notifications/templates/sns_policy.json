@@ -1,0 +1,21 @@
+{
+    "Statement": [
+        {
+            "Action": "SNS:Publish",
+            "Condition": {
+                "ArnLike": {
+                    "AWS:SourceArn": "arn:${partition}:s3:::${bucket_name}"
+                },
+                "StringEquals": {
+                    "AWS:SourceAccount": "${account_id}"
+                }
+            },
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "s3.amazonaws.com"
+            },
+            "Resource": "${topic_arn}"
+        }
+    ],
+    "Version": "2012-10-17"
+}

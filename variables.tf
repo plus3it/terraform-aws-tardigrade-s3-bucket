@@ -10,7 +10,7 @@ variable "acl" {
 }
 
 variable "force_destroy" {
-  description = "boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error"
+  description = "Boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error"
   type        = bool
   default     = false
 }
@@ -24,6 +24,35 @@ variable "grants" {
     uri         = string
   }))
   default = []
+}
+
+variable "notifications" {
+  description = "A schema object for the S3 bucket notifications configuration"
+  type = object({
+    lambda_functions = list(object({
+      lambda_function_arn = string
+      events              = list(string)
+      filter_prefix       = string
+      filter_suffix       = string
+    }))
+    topics = list(object({
+      topic_arn     = string
+      events        = list(string)
+      filter_prefix = string
+      filter_suffix = string
+    }))
+    queues = list(object({
+      queue_arn     = string
+      events        = list(string)
+      filter_prefix = string
+      filter_suffix = string
+    }))
+  })
+  default = {
+    lambda_functions = []
+    topics           = []
+    queues           = []
+  }
 }
 
 variable "policy" {
