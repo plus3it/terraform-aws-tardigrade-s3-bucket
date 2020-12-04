@@ -49,7 +49,7 @@ resource "aws_s3_bucket_notification" "this" {
 
   bucket = aws_s3_bucket_public_access_block.this.id
 
-  dynamic lambda_function {
+  dynamic "lambda_function" {
     for_each = var.notifications.lambda_functions
     content {
       lambda_function_arn = lambda_function.value.lambda_function_arn
@@ -59,7 +59,7 @@ resource "aws_s3_bucket_notification" "this" {
     }
   }
 
-  dynamic topic {
+  dynamic "topic" {
     for_each = var.notifications.topics
     content {
       topic_arn     = topic.value.topic_arn
@@ -69,7 +69,7 @@ resource "aws_s3_bucket_notification" "this" {
     }
   }
 
-  dynamic queue {
+  dynamic "queue" {
     for_each = var.notifications.queues
     content {
       queue_arn     = queue.value.queue_arn

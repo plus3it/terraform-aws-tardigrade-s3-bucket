@@ -79,7 +79,7 @@ variable "public_access_block" {
 
 variable "server_side_encryption_configuration" {
   description = "A list of schema objects for the server side encryption configuration"
-  type        = list
+  type        = list(any)
   default     = []
 }
 
