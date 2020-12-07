@@ -1,13 +1,13 @@
-provider aws {
+provider "aws" {
   region = "us-east-1"
 }
 
-resource random_id name {
+resource "random_id" "name" {
   byte_length = 6
   prefix      = "tardigrade-s3-bucket-"
 }
 
-module create_bucket {
+module "create_bucket" {
   source = "../../"
   providers = {
     aws = aws
@@ -52,7 +52,7 @@ module create_bucket {
   ]
 }
 
-module lambda {
+module "lambda" {
   source = "git::https://github.com/plus3it/terraform-aws-lambda.git?ref=v1.2.0"
 
   function_name = random_id.name.hex
@@ -61,7 +61,7 @@ module lambda {
   source_path   = "${path.module}/lambda.py"
 }
 
-resource aws_lambda_permission this {
+resource "aws_lambda_permission" "this" {
   action         = "lambda:InvokeFunction"
   function_name  = module.lambda.function_name
   principal      = "s3.amazonaws.com"
@@ -69,9 +69,9 @@ resource aws_lambda_permission this {
   source_account = data.aws_caller_identity.current.account_id
 }
 
-resource aws_sns_topic this {}
+resource "aws_sns_topic" "this" {}
 
-resource aws_sns_topic_policy this {
+resource "aws_sns_topic_policy" "this" {
   arn = aws_sns_topic.this.arn
   policy = templatefile("templates/sns_policy.json", {
     account_id  = data.aws_caller_identity.current.account_id
@@ -81,9 +81,9 @@ resource aws_sns_topic_policy this {
   })
 }
 
-resource aws_sqs_queue this {}
+resource "aws_sqs_queue" "this" {}
 
-resource aws_sqs_queue_policy this {
+resource "aws_sqs_queue_policy" "this" {
   queue_url = aws_sqs_queue.this.id
 
   policy = templatefile("templates/sqs_policy.json", {
@@ -94,10 +94,10 @@ resource aws_sqs_queue_policy this {
   })
 }
 
-data aws_partition current {}
+data "aws_partition" "current" {}
 
-data aws_caller_identity current {}
+data "aws_caller_identity" "current" {}
 
-output create_bucket {
+output "create_bucket" {
   value = module.create_bucket
 }
