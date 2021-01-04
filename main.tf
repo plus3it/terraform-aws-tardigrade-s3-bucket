@@ -33,6 +33,57 @@ resource "aws_s3_bucket" "this" {
       uri         = grant.value.uri
     }
   }
+
+  dynamic "lifecycle_rule" {
+    for_each = var.lifecycle_rules
+
+    content {
+      id                                     = lifecycle_rule.value.id
+      enabled                                = lifecycle_rule.value.enabled
+      prefix                                 = lifecycle_rule.value.prefix
+      tags                                   = lifecycle_rule.value.tags
+      abort_incomplete_multipart_upload_days = lifecycle_rule.value.abort_incomplete_multipart_upload_days
+
+      dynamic "expiration" {
+        for_each = lifecycle_rule.value.expiration != null ? [lifecycle_rule.value.expiration] : []
+
+        content {
+          date                          = expiration.value.date
+          days                          = expiration.value.days
+          expired_object_delete_marker  = expiration.value.expired_object_delete_marker
+        }
+      }
+
+      dynamic "transition" {
+        for_each = lifecycle_rule.value.transitions
+
+        content {
+          date = transition.value.date
+          days = transition.value.days
+          storage_class = transition.value.storage_class
+        }
+      }
+
+      dynamic "noncurrent_version_expiration" {
+        for_each = lifecycle_rule.value.noncurrent_version_expiration != null ? [lifecycle_rule.value.noncurrent_version_expiration] : []
+
+        content {
+          days                          = noncurrent_version_expiration.value.days
+        }
+      }
+
+      dynamic "noncurrent_version_transition" {
+        for_each = lifecycle_rule.value.noncurrent_version_transitions
+
+        content {
+          days = noncurrent_version_transition.value.days
+          storage_class = noncurrent_version_transition.value.storage_class
+        }
+      }
+
+    }
+
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {

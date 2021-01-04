@@ -93,3 +93,34 @@ variable "versioning" {
   description = "The state of versioning of the bucket"
   default     = false
 }
+
+variable "lifecycle_rules" {
+  type = list(object({
+    id                                     = string
+    enabled                                = string
+    prefix                                 = string
+    tags                                   = map(string)
+    abort_incomplete_multipart_upload_days = number
+
+    expiration = object({
+      date                          = string
+      days                          = number
+      expired_object_delete_marker  = string
+    })
+
+    transitions = list(object({
+      date  = string
+      days = number
+      storage_class = string
+    }))
+
+    noncurrent_version_expiration = object({
+      days                          = number
+    })
+
+    noncurrent_version_transitions = list(object({
+      days = number
+      storage_class = string
+    }))
+  }))
+}
