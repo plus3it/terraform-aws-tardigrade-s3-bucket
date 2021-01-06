@@ -48,9 +48,9 @@ resource "aws_s3_bucket" "this" {
         for_each = lifecycle_rule.value.expiration != null ? [lifecycle_rule.value.expiration] : []
 
         content {
-          date                          = expiration.value.date
-          days                          = expiration.value.days
-          expired_object_delete_marker  = expiration.value.expired_object_delete_marker
+          date                         = expiration.value.date
+          days                         = expiration.value.days
+          expired_object_delete_marker = expiration.value.expired_object_delete_marker
         }
       }
 
@@ -58,8 +58,8 @@ resource "aws_s3_bucket" "this" {
         for_each = lifecycle_rule.value.transitions
 
         content {
-          date = transition.value.date
-          days = transition.value.days
+          date          = transition.value.date
+          days          = transition.value.days
           storage_class = transition.value.storage_class
         }
       }
@@ -68,7 +68,7 @@ resource "aws_s3_bucket" "this" {
         for_each = lifecycle_rule.value.noncurrent_version_expiration != null ? [lifecycle_rule.value.noncurrent_version_expiration] : []
 
         content {
-          days                          = noncurrent_version_expiration.value.days
+          days = noncurrent_version_expiration.value.days
         }
       }
 
@@ -76,7 +76,7 @@ resource "aws_s3_bucket" "this" {
         for_each = lifecycle_rule.value.noncurrent_version_transitions
 
         content {
-          days = noncurrent_version_transition.value.days
+          days          = noncurrent_version_transition.value.days
           storage_class = noncurrent_version_transition.value.storage_class
         }
       }

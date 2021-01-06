@@ -103,23 +103,23 @@ variable "lifecycle_rules" {
     abort_incomplete_multipart_upload_days = number
 
     expiration = object({
-      date                          = string
-      days                          = number
-      expired_object_delete_marker  = string
+      date                         = string
+      days                         = number
+      expired_object_delete_marker = string
     })
 
     transitions = list(object({
-      date  = string
-      days = number
+      date          = string
+      days          = number
       storage_class = string
     }))
 
     noncurrent_version_expiration = object({
-      days                          = number
+      days = number
     })
 
     noncurrent_version_transitions = list(object({
-      days = number
+      days          = number
       storage_class = string
     }))
   }))
