@@ -123,4 +123,5 @@ variable "lifecycle_rules" {
       storage_class = string
     }))
   }))
+  default = []
 }
