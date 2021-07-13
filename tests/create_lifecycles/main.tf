@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 resource "random_id" "name" {
   byte_length = 6
   prefix      = "tardigrade-s3-bucket-"
@@ -9,9 +5,6 @@ resource "random_id" "name" {
 
 module "create_lifecycles" {
   source = "../../"
-  providers = {
-    aws = aws
-  }
 
   acl = null
 

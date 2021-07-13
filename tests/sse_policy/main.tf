@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 resource "random_id" "name" {
   byte_length = 6
   prefix      = "tardigrade-s3-bucket-"
@@ -13,9 +9,6 @@ resource "aws_kms_key" "this" {
 
 module "sse_policy" {
   source = "../../"
-  providers = {
-    aws = aws
-  }
 
   acl    = "private"
   bucket = random_id.name.hex

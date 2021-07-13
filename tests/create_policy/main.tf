@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 locals {
   partition = "aws"
 }
@@ -23,9 +19,7 @@ resource "random_id" "name" {
 
 module "create_policy" {
   source = "../../"
-  providers = {
-    aws = aws
-  }
+
   acl    = "private"
   bucket = random_id.name.hex
   policy = join("", data.template_file.this.*.rendered)

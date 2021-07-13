@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 resource "random_id" "name" {
   byte_length = 6
   prefix      = "tardigrade-s3-bucket-"
@@ -9,9 +5,6 @@ resource "random_id" "name" {
 
 module "create_bucket" {
   source = "../../"
-  providers = {
-    aws = aws
-  }
 
   bucket = random_id.name.hex
 
@@ -34,7 +27,7 @@ module "create_bucket" {
     ]
     queues = [
       {
-        queue_arn     = aws_sqs_queue.this.arn
+        queue_arn     = aws_sqs_queue.distributor.arn
         events        = ["s3:ObjectRestore:*"]
         filter_prefix = null
         filter_suffix = null
@@ -47,13 +40,13 @@ module "create_bucket" {
   }
 
   depends_on = [
-    aws_sqs_queue_policy.this,
+    aws_sqs_queue.distributor,
     aws_lambda_permission.this,
   ]
 }
 
 module "lambda" {
-  source = "git::https://github.com/plus3it/terraform-aws-lambda.git?ref=v1.2.0"
+  source = "git::https://github.com/plus3it/terraform-aws-lambda.git?ref=v1.3.0"
 
   function_name = random_id.name.hex
   handler       = "lambda.handler"
@@ -81,16 +74,29 @@ resource "aws_sns_topic_policy" "this" {
   })
 }
 
-resource "aws_sqs_queue" "this" {}
+# resource "aws_sqs_queue" "this" {}
+#
+# resource "aws_sqs_queue_policy" "this" {
+#   queue_url = aws_sqs_queue.this.id
+#
+#   policy = templatefile("templates/sqs_policy.json", {
+#     account_id  = data.aws_caller_identity.current.account_id
+#     bucket_name = random_id.name.hex
+#     partition   = data.aws_partition.current.partition
+#     queue_arn   = aws_sqs_queue.this.arn
+#   })
+# }
 
-resource "aws_sqs_queue_policy" "this" {
-  queue_url = aws_sqs_queue.this.id
-
+# Workaround for known localstack issue in the above Terraform code:
+#      https://github.com/localstack/localstack/issues/4225
+#
+resource "aws_sqs_queue" "distributor" {
+  name = "distributor_queue"
   policy = templatefile("templates/sqs_policy.json", {
     account_id  = data.aws_caller_identity.current.account_id
     bucket_name = random_id.name.hex
     partition   = data.aws_partition.current.partition
-    queue_arn   = aws_sqs_queue.this.arn
+    queue_arn   = "arn:aws:sqs:us-east-1:000000000000:distributor_queue"
   })
 }
 
