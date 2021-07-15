@@ -53,7 +53,7 @@ module "create_bucket" {
 }
 
 module "lambda" {
-  source = "git::https://github.com/plus3it/terraform-aws-lambda.git?ref=v1.2.0"
+  source = "git::https://github.com/plus3it/terraform-aws-lambda.git?ref=v1.3.0"
 
   function_name = random_id.name.hex
   handler       = "lambda.handler"
