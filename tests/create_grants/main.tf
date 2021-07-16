@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 data "aws_canonical_user_id" "current_user" {}
 
 resource "random_id" "name" {
@@ -11,9 +7,6 @@ resource "random_id" "name" {
 
 module "create_grants" {
   source = "../../"
-  providers = {
-    aws = aws
-  }
 
   acl = null
 
