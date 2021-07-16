@@ -40,7 +40,6 @@ module "create_bucket" {
   }
 
   depends_on = [
-    aws_sqs_queue.this,
     aws_lambda_permission.this,
   ]
 }
