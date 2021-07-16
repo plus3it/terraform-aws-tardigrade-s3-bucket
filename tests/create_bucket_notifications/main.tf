@@ -27,7 +27,7 @@ module "create_bucket" {
     ]
     queues = [
       {
-        queue_arn     = aws_sqs_queue.distributor.arn
+        queue_arn     = aws_sqs_queue.this.arn
         events        = ["s3:ObjectRestore:*"]
         filter_prefix = null
         filter_suffix = null
@@ -40,7 +40,7 @@ module "create_bucket" {
   }
 
   depends_on = [
-    aws_sqs_queue.distributor,
+    aws_sqs_queue.this,
     aws_lambda_permission.this,
   ]
 }
@@ -74,33 +74,21 @@ resource "aws_sns_topic_policy" "this" {
   })
 }
 
-# resource "aws_sqs_queue" "this" {}
-#
-# resource "aws_sqs_queue_policy" "this" {
-#   queue_url = aws_sqs_queue.this.id
-#
-#   policy = templatefile("templates/sqs_policy.json", {
-#     account_id  = data.aws_caller_identity.current.account_id
-#     bucket_name = random_id.name.hex
-#     partition   = data.aws_partition.current.partition
-#     queue_arn   = aws_sqs_queue.this.arn
-#   })
-# }
+resource "aws_sqs_queue" "this" {
+  name = random_id.name.hex
 
-# Workaround for known localstack issue in the above Terraform code:
-#      https://github.com/localstack/localstack/issues/4225
-#
-resource "aws_sqs_queue" "distributor" {
-  name = "distributor_queue"
+
   policy = templatefile("templates/sqs_policy.json", {
     account_id  = data.aws_caller_identity.current.account_id
     bucket_name = random_id.name.hex
     partition   = data.aws_partition.current.partition
-    queue_arn   = "arn:aws:sqs:us-east-1:000000000000:distributor_queue"
+    queue_arn   = "arn:${data.aws_partition.current.partition}:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${random_id.name.hex}"
   })
 }
 
 data "aws_partition" "current" {}
+
+data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
