@@ -20,9 +20,10 @@ resource "random_id" "name" {
 module "create_policy" {
   source = "../../"
 
-  acl    = "private"
-  bucket = random_id.name.hex
-  policy = join("", data.template_file.this.*.rendered)
+  create_policy = true
+  acl           = "private"
+  bucket        = random_id.name.hex
+  policy        = join("", data.template_file.this.*.rendered)
   tags = {
     environment = "testing"
   }
