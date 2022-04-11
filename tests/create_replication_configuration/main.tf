@@ -91,7 +91,7 @@ resource "aws_s3_bucket_versioning" "destination" {
 module "create_bucket" {
   source = "../../"
 
-  depends_on = [aws_s3_bucket_versioning.destination]
+  //depends_on = [aws_s3_bucket_versioning.destination]
 
   bucket = random_id.name.hex
 
@@ -110,7 +110,8 @@ module "create_bucket" {
         source_selection_criteria        = null
 
         destination = {
-          bucket                     = aws_s3_bucket.destination.arn
+          //bucket                     = aws_s3_bucket.destination.arn
+          bucket                     = "arn:aws:s3:::${aws_s3_bucket_versioning.destination.id}"
           storage_class              = "STANDARD"
           access_control_translation = null
           account                    = null
