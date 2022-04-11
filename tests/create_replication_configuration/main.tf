@@ -77,12 +77,12 @@ resource "aws_iam_role_policy_attachment" "replication" {
 
 resource "aws_s3_bucket" "destination" {
   provider = aws.west
-  bucket = format("%s-%s", "destination", random_id.name.hex)
+  bucket   = format("%s-%s", "destination", random_id.name.hex)
 }
 
 resource "aws_s3_bucket_versioning" "destination" {
   provider = aws.west
-  bucket = aws_s3_bucket.destination.id
+  bucket   = aws_s3_bucket.destination.id
   versioning_configuration {
     status = "Enabled"
   }
@@ -95,28 +95,28 @@ module "create_bucket" {
 
   bucket = random_id.name.hex
 
-  acl    = "private"
+  acl        = "private"
   versioning = "Enabled"
 
   replication_configuration = {
-    role   = aws_iam_role.replication.arn
+    role = aws_iam_role.replication.arn
 
     rules = [
       {
-        id = "foobar"
+        id                               = "foobar"
         delete_marker_replication_status = "Disabled"
-        priority = null
-        status = "Enabled"
-        source_selection_criteria= null
+        priority                         = null
+        status                           = "Enabled"
+        source_selection_criteria        = null
 
         destination = {
-          bucket        = aws_s3_bucket.destination.arn
-          storage_class = "STANDARD"
+          bucket                     = aws_s3_bucket.destination.arn
+          storage_class              = "STANDARD"
           access_control_translation = null
-          account = null
-          encryption_configuration = null
-          metrics = null
-          replication_time = null
+          account                    = null
+          encryption_configuration   = null
+          metrics                    = null
+          replication_time           = null
         }
 
         filter = {
@@ -126,7 +126,7 @@ module "create_bucket" {
             value = "Foo"
           }
           and = null
-        }          
+        }
       }
     ]
   }

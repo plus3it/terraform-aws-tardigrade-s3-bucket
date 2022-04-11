@@ -1,15 +1,15 @@
 resource "aws_s3_bucket" "this" {
   bucket        = var.bucket
   tags          = var.tags
-  force_destroy = var.force_destroy    
+  force_destroy = var.force_destroy
 }
 
 resource "aws_s3_bucket_logging" "this" {
   count  = var.logging == null ? 0 : 1
   bucket = aws_s3_bucket.this.id
 
-  target_bucket = var.logging.target_bucket
-  target_prefix = var.logging.target_prefix
+  target_bucket         = var.logging.target_bucket
+  target_prefix         = var.logging.target_prefix
   expected_bucket_owner = var.logging.expected_bucket_owner
 
   dynamic "target_grant" {
@@ -18,8 +18,8 @@ resource "aws_s3_bucket_logging" "this" {
 
     content {
       grantee {
-        email_address = target_grant.grantee.value.email_address  
-        id            = target_grant.grantee.value.id  
+        email_address = target_grant.grantee.value.email_address
+        id            = target_grant.grantee.value.id
         type          = target_grant.grantee.value.type
         uri           = target_grant.grantee.value.uri
       }
@@ -37,21 +37,21 @@ resource "aws_s3_bucket_ownership_controls" "this" {
     for_each = var.ownership_controls.rule != null ? [var.ownership_controls.rule] : []
 
     content {
-      object_ownership = rule.value.object_ownership  
+      object_ownership = rule.value.object_ownership
     }
   }
 }
 
 resource "aws_s3_bucket_request_payment_configuration" "this" {
-  count  = var.request_payment_configuration == null ? 0 : 1
-  bucket = aws_s3_bucket.this.id  
+  count                 = var.request_payment_configuration == null ? 0 : 1
+  bucket                = aws_s3_bucket.this.id
   expected_bucket_owner = var.request_payment_configuration.expected_bucket_owner
-  payer                 = var.request_payment_configuration.payer    
+  payer                 = var.request_payment_configuration.payer
 }
 
 resource "aws_s3_bucket_cors_configuration" "this" {
-  count = var.cors_configuration == null ? 0 : 1
-  bucket = aws_s3_bucket.this.id
+  count                 = var.cors_configuration == null ? 0 : 1
+  bucket                = aws_s3_bucket.this.id
   expected_bucket_owner = var.cors_configuration.expected_bucket_owner
 
   dynamic "cors_rule" {
@@ -60,17 +60,17 @@ resource "aws_s3_bucket_cors_configuration" "this" {
       allowed_headers = cors_rule.value.allowed_headers
       allowed_methods = cors_rule.value.allowed_methods
       allowed_origins = cors_rule.value.allowed_origins
-      expose_headers = cors_rule.value.expose_headers
-      id = cors_rule.value.id
+      expose_headers  = cors_rule.value.expose_headers
+      id              = cors_rule.value.id
       max_age_seconds = cors_rule.value.max_age_seconds
     }
-  }  
-} 
+  }
+}
 
 resource "aws_s3_bucket_intelligent_tiering_configuration" "this" {
-  count = var.intelligent_tiering_configuration == null ? 0 : 1
+  count  = var.intelligent_tiering_configuration == null ? 0 : 1
   bucket = aws_s3_bucket.this.id
-  name = var.intelligent_tiering_configuration.name
+  name   = var.intelligent_tiering_configuration.name
   status = var.intelligent_tiering_configuration.status
 
   dynamic "tiering" {
@@ -79,7 +79,7 @@ resource "aws_s3_bucket_intelligent_tiering_configuration" "this" {
       access_tier = tiering.value.access_tier
       days        = tiering.value.days
     }
-  } 
+  }
 
   dynamic "filter" {
     for_each = var.intelligent_tiering_configuration.filter != null ? [var.intelligent_tiering_configuration.filter] : []
@@ -88,21 +88,21 @@ resource "aws_s3_bucket_intelligent_tiering_configuration" "this" {
       prefix = filter.value.prefix
       tags   = filter.value.tags
     }
-  } 
-} 
+  }
+}
 
 resource "aws_s3_bucket_replication_configuration" "this" {
   count = var.replication_configuration == null ? 0 : 1
 
   bucket = aws_s3_bucket.this.id
   role   = var.replication_configuration.role
-  
+
   dynamic "rule" {
     for_each = var.replication_configuration.rules
     content {
-      id                        = rule.value.id
-      priority                  = rule.value.priority
-      status                    = rule.value.status
+      id       = rule.value.id
+      priority = rule.value.priority
+      status   = rule.value.status
 
       dynamic "delete_marker_replication" {
         for_each = rule.value.delete_marker_replication_status != null ? [rule.value.delete_marker_replication_status] : []
@@ -112,9 +112,9 @@ resource "aws_s3_bucket_replication_configuration" "this" {
       }
 
       destination {
-        bucket             = rule.value.destination.bucket
-        storage_class      = rule.value.destination.storage_class        
-        account            = rule.value.destination.account
+        bucket        = rule.value.destination.bucket
+        storage_class = rule.value.destination.storage_class
+        account       = rule.value.destination.account
 
         dynamic "encryption_configuration" {
           for_each = rule.value.destination.encryption_configuration != null ? [rule.value.destination.encryption_configuration] : []
@@ -197,12 +197,12 @@ resource "aws_s3_bucket_replication_configuration" "this" {
         }
       }
     }
-  }    
-} 
+  }
+}
 
 resource "aws_s3_bucket_inventory" "this" {
-  count  = var.bucket_inventory == null ? 0 : 1
-  bucket                   = aws_s3_bucket.this.id 
+  count                    = var.bucket_inventory == null ? 0 : 1
+  bucket                   = aws_s3_bucket.this.id
   name                     = var.bucket_inventory.name
   included_object_versions = var.bucket_inventory.included_object_versions
   enabled                  = var.bucket_inventory.enabled
@@ -222,11 +222,11 @@ resource "aws_s3_bucket_inventory" "this" {
 
   dynamic "filter" {
     for_each = var.bucket_inventory.filter != null ? [var.bucket_inventory.filter] : []
-    content {      
+    content {
       prefix = filter.value.prefix
     }
-  } 
-} 
+  }
+}
 
 resource "aws_s3_bucket_acl" "with_acl" {
   count  = var.acl == null ? 0 : 1
@@ -241,24 +241,24 @@ resource "aws_s3_bucket_acl" "with_grants" {
   bucket = aws_s3_bucket.this.id
 
   access_control_policy {
-      dynamic "grant" {
+    dynamic "grant" {
 
       for_each = var.grants
 
       content {
         grantee {
-          id          = grant.value.id
-          type        = grant.value.type
-          uri         = grant.value.uri
-        }        
-        permission = grant.value.permissions        
+          id   = grant.value.id
+          type = grant.value.type
+          uri  = grant.value.uri
+        }
+        permission = grant.value.permissions
       }
     }
 
     owner {
       id = data.aws_canonical_user_id.current.id
     }
-  }  
+  }
 }
 
 resource "aws_s3_bucket_policy" "this" {
@@ -276,7 +276,7 @@ resource "aws_s3_bucket_versioning" "this" {
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   count  = var.server_side_encryption ? 1 : 0
-  bucket = aws_s3_bucket.this.id  
+  bucket = aws_s3_bucket.this.id
 
   dynamic "rule" {
     iterator = sse_config
@@ -287,8 +287,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
         kms_master_key_id = lookup(sse_config.value, "kms_master_key_id", null)
       }
     }
-  } 
-} 
+  }
+}
 
 resource "aws_s3_bucket_lifecycle_configuration" "this" {
   count  = length(var.lifecycle_rules) == 0 ? 0 : 1
@@ -314,9 +314,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
         for_each = lifecycle_rule.value.filter != null ? [lifecycle_rule.value.filter] : []
 
         content {
-          prefix                       = filter.value.prefix
-          object_size_greater_than     = filter.value.object_size_greater_than
-          object_size_less_than        = filter.value.object_size_less_than
+          prefix                   = filter.value.prefix
+          object_size_greater_than = filter.value.object_size_greater_than
+          object_size_less_than    = filter.value.object_size_less_than
           dynamic "tag" {
             for_each = filter.value.tags != null ? [filter.value.tags] : []
 
@@ -329,10 +329,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
             for_each = filter.value.and != null ? [filter.value.and] : []
 
             content {
-              prefix                       = and.value.prefix
-              object_size_greater_than     = and.value.object_size_greater_than
-              object_size_less_than        = and.value.object_size_less_than
-              tags                         = and.value.tags
+              prefix                   = and.value.prefix
+              object_size_greater_than = and.value.object_size_greater_than
+              object_size_less_than    = and.value.object_size_less_than
+              tags                     = and.value.tags
             }
           }
         }
@@ -353,9 +353,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
         for_each = lifecycle_rule.value.transitions != null ? lifecycle_rule.value.transitions : []
 
         content {
-          date          = transition.value.date  
-          days          = transition.value.days  
-          storage_class = transition.value.storage_class 
+          date          = transition.value.date
+          days          = transition.value.days
+          storage_class = transition.value.storage_class
         }
       }
 
@@ -363,7 +363,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
         for_each = lifecycle_rule.value.noncurrent_version_expiration != null ? [lifecycle_rule.value.noncurrent_version_expiration] : []
 
         content {
-          noncurrent_days = noncurrent_version_expiration.value.noncurrent_days
+          noncurrent_days           = noncurrent_version_expiration.value.noncurrent_days
           newer_noncurrent_versions = noncurrent_version_expiration.value.newer_noncurrent_versions
         }
       }
@@ -372,14 +372,14 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
         for_each = lifecycle_rule.value.noncurrent_version_transition != null ? lifecycle_rule.value.noncurrent_version_transition : []
 
         content {
-          noncurrent_days = noncurrent_version_transition.value.noncurrent_days
+          noncurrent_days           = noncurrent_version_transition.value.noncurrent_days
           newer_noncurrent_versions = noncurrent_version_transition.value.newer_noncurrent_versions
-          storage_class = noncurrent_version_transition.value.storage_class
+          storage_class             = noncurrent_version_transition.value.storage_class
         }
       }
     }
   }
-} 
+}
 
 resource "aws_s3_bucket_public_access_block" "this" {
   bucket = aws_s3_bucket.this.id
@@ -424,4 +424,4 @@ resource "aws_s3_bucket_notification" "this" {
       filter_suffix = queue.value.filter_suffix
     }
   }
-} 
+}

@@ -10,7 +10,7 @@ module "create_bucket" {
 
   request_payment_configuration = {
     expected_bucket_owner = null
-    payer = "Requester"
+    payer                 = "Requester"
   }
 }
 

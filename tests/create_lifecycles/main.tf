@@ -15,23 +15,23 @@ module "create_lifecycles" {
       prefix = "aPrefix/"
 
       abort_incomplete_multipart_upload = {
-          days_after_initiation = 7
+        days_after_initiation = 7
       }
 
       filter = {
-          prefix                   = "aPrefix/"
-          tags                     = null
-          and                      = null
-          object_size_greater_than = null
-          object_size_less_than    = null
+        prefix                   = "aPrefix/"
+        tags                     = null
+        and                      = null
+        object_size_greater_than = null
+        object_size_less_than    = null
       }
 
       expiration = null
 
       transitions = [{
-          date          = null
-          days          = 30
-          storage_class = "STANDARD_IA"
+        date          = null
+        days          = 30
+        storage_class = "STANDARD_IA"
         },
         {
           date          = null
@@ -47,7 +47,7 @@ module "create_lifecycles" {
       id     = "expiredObjDelMarkers"
       status = "Enabled"
       filter = null
-      
+
       abort_incomplete_multipart_upload = {
         days_after_initiation = 7
       }
@@ -79,7 +79,7 @@ module "create_lifecycles" {
         object_size_greater_than = null
         object_size_less_than    = null
       }
-      
+
       abort_incomplete_multipart_upload = {
         days_after_initiation = 7
       }

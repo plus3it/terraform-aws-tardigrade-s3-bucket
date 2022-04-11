@@ -19,7 +19,7 @@ module "create_bucket" {
     enabled                  = true
 
     filter = null
-    
+
     schedule = {
       frequency = "Daily"
     }
@@ -29,7 +29,7 @@ module "create_bucket" {
         format     = "ORC"
         bucket_arn = aws_s3_bucket.inventory.arn
         account_id = null
-        prefix = null
+        prefix     = null
       }
     }
   }

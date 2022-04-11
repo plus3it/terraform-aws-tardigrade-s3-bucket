@@ -19,11 +19,11 @@ module "create_bucket" {
   bucket = random_id.name.hex
 
   logging = {
-    target_bucket = aws_s3_bucket.log_bucket.id
-    target_prefix = "log/"
+    target_bucket         = aws_s3_bucket.log_bucket.id
+    target_prefix         = "log/"
     expected_bucket_owner = null
-    target_grants = null
-  }  
+    target_grants         = null
+  }
 }
 
 output "create_bucket" {

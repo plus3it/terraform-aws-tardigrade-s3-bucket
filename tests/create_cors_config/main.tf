@@ -27,7 +27,7 @@ module "create_bucket" {
         max_age_seconds = null
         id              = null
       }
-    ]  
+    ]
   }
 }
 

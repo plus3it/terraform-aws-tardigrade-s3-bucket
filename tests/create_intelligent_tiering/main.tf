@@ -9,7 +9,7 @@ module "create_bucket" {
   bucket = random_id.name.hex
 
   intelligent_tiering_configuration = {
-    name = "ImportantBlueDocuments"
+    name   = "ImportantBlueDocuments"
     status = "Enabled"
 
     filter = {
@@ -30,7 +30,7 @@ module "create_bucket" {
         access_tier = "ARCHIVE_ACCESS"
         days        = 125
       }
-    ]  
+    ]
   }
 }
 

@@ -12,7 +12,7 @@ module "create_bucket" {
   ownership_controls = {
     rule = {
       object_ownership = "ObjectWriter"
-    } 
+    }
   }
 }
 

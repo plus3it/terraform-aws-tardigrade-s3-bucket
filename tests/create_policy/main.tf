@@ -24,7 +24,7 @@ module "create_policy" {
   acl           = "private"
   bucket        = random_id.name.hex
   policy        = join("", data.template_file.this.*.rendered)
-  tags          = {
+  tags = {
     environment = "testing"
   }
 }
