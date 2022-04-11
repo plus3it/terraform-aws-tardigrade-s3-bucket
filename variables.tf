@@ -17,7 +17,7 @@ variable "logging" {
     target_grants = list(object({
       grantee = object({
         email_address = string # (Optional) Email address of the grantee. See Regions and Endpoints for supported AWS regions where this argument can be specified.
-        id            = string # (Optional) The canonical user ID of the grantee.  
+        id            = string # (Optional) The canonical user ID of the grantee.
         type          = string # (Required) Type of grantee. Valid values: CanonicalUser, AmazonCustomerByEmail, Group.
         uri           = string # (Optional) URI of the grantee group.
       })
@@ -71,7 +71,7 @@ variable "intelligent_tiering_configuration" {
       prefix = string      # (Optional) An object key name prefix that identifies the subset of objects to which the configuration applies.
       tags   = map(string) # (Optional) All of these tags must exist in the object's tag set in order for the configuration to apply.
     })
-    tiering = set(object({ # (Required) The S3 Intelligent-Tiering storage class tiers of the configuration 
+    tiering = set(object({ # (Required) The S3 Intelligent-Tiering storage class tiers of the configuration
       access_tier = string # (Required) S3 Intelligent-Tiering access tier. Valid values: ARCHIVE_ACCESS, DEEP_ARCHIVE_ACCESS.
       days        = number # (Required) The number of consecutive days of no access after which an object will be eligible to be transitioned to the corresponding tier.
     }))
@@ -83,19 +83,17 @@ variable "replication_configuration" {
   description = "Schema object of the S3 replication configuration"
   type = object({
     role = string                               # Required) The ARN of the IAM role for Amazon S3 to assume when replicating the objects.
-    rules = list(object({                       # (Required) List of configuration blocks describing the rules managing the replication 
+    rules = list(object({                       # (Required) List of configuration blocks describing the rules managing the replication
       delete_marker_replication_status = string # (Optional) Whether delete markers are replicated. This argument is only valid with V2 replication configurations (i.e., when filter is used)
       id                               = string # (Optional) Unique identifier for the rule. Must be less than or equal to 255 characters in length.
-      priority                         = number # (Optional) The priority associated with the rule. Priority should only be set if filter is 
-      #configured. If not provided, defaults to 0. Priority must be unique between multiple rules.
-      status = string # (Required) The status of the 
-      #rule. Either "Enabled" or "Disabled". The rule is ignored if status is not "Enabled".
-      destination = object({                # Required) Specifies the destination for the rule
-        bucket        = string              # (Required) The ARN of the S3 bucket where you want Amazon S3 to store replicas of the objects identified by the rule.
-        storage_class = string              # (Optional) The storage class used to store the object. By default, Amazon S3 uses the storage class of the source object to create the object replica.
-        account       = string              # (Optional) The Account ID to specify the replica ownership. Must be used in conjunction with access_control_translation override configuration.
-        encryption_configuration = object({ # (Optional) A configuration block that provides information about encryption. If source_selection_criteria is specified, you must specify this element
-          replica_kms_key_id = string       # (Required) The ID (Key ARN or Alias ARN) of the customer managed AWS KMS key stored in AWS Key Management Service (KMS) for the destination bucket.
+      priority                         = number # (Optional) The priority associated with the rule. Priority should only be set if filter is configured. If not provided, defaults to 0. Priority must be unique between multiple rules.
+      status                           = string # (Required) The status of the rule. Either "Enabled" or "Disabled". The rule is ignored if status is not "Enabled".
+      destination = object({                    # Required) Specifies the destination for the rule
+        bucket        = string                  # (Required) The ARN of the S3 bucket where you want Amazon S3 to store replicas of the objects identified by the rule.
+        storage_class = string                  # (Optional) The storage class used to store the object. By default, Amazon S3 uses the storage class of the source object to create the object replica.
+        account       = string                  # (Optional) The Account ID to specify the replica ownership. Must be used in conjunction with access_control_translation override configuration.
+        encryption_configuration = object({     # (Optional) A configuration block that provides information about encryption. If source_selection_criteria is specified, you must specify this element
+          replica_kms_key_id = string           # (Required) The ID (Key ARN or Alias ARN) of the customer managed AWS KMS key stored in AWS Key Management Service (KMS) for the destination bucket.
         })
         access_control_translation = object({ # (Optional) A configuration block that specifies the overrides to use for object owners on replication
           owner = string                      # (Required) Specifies the replica ownership. Valid values: Destination.
@@ -106,11 +104,10 @@ variable "replication_configuration" {
             minutes = number         # (Required) Time in minutes. Valid values: 15.
           })
         })
-        replication_time = object({ # Optional) A configuration block that specifies S3 Replication Time Control (S3 RTC), including whether S3 RTC is enabled and the time when all objects and operations on 
-          #objects must be replicated. Replication Time Control must be used in conjunction with metrics.
-          status = string    # (Required) The status of the Destination Metrics. Either "Enabled" or "Disabled".
-          time = object({    # (Required) A configuration block specifying the time by which replication should be complete for all objects and operations on objects
-            minutes = number # (Required) Time in minutes. Valid values: 15.
+        replication_time = object({ # Optional) A configuration block that specifies S3 Replication Time Control (S3 RTC), including whether S3 RTC is enabled and the time when all objects and operations on objects must be replicated. Replication Time Control must be used in conjunction with metrics.
+          status = string           # (Required) The status of the Destination Metrics. Either "Enabled" or "Disabled".
+          time = object({           # (Required) A configuration block specifying the time by which replication should be complete for all objects and operations on objects
+            minutes = number        # (Required) Time in minutes. Valid values: 15.
           })
         })
       })
@@ -126,8 +123,7 @@ variable "replication_configuration" {
         replica_modifications = object({   # (Optional) A configuration block that you can specify for selections for modifications on replicas. Amazon S3 doesn't replicate replica modifications by default. In the latest version of replication configuration (when filter is specified), you can specify this element and set the status to Enabled to replicate modifications on replicas.
           status = string                  # (Required) Whether the existing objects should be replicated. Either "Enabled" or "Disabled".
         })
-        sse_kms_encrypted_objects = object({ # (Optional) A configuration block for filter information for the selection of Amazon S3 objects encrypted with AWS KMS. If specified, replica_kms_key_id in 
-          #destination encryption_configuration must be specified as well. status = string # (Required) Whether the existing objects should be replicated. Either "Enabled" or "Disabled".
+        sse_kms_encrypted_objects = object({ # (Optional) A configuration block for filter information for the selection of Amazon S3 objects encrypted with AWS KMS. If specified, replica_kms_key_id in destination encryption_configuration must be specified as well. status = string # (Required) Whether the existing objects should be replicated. Either "Enabled" or "Disabled".
         })
       })
     }))

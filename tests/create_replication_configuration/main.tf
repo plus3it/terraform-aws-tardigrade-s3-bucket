@@ -49,7 +49,7 @@ resource "aws_iam_policy" "replication" {
       "Action": [
         "s3:GetObjectVersionForReplication",
         "s3:GetObjectVersionAcl",
-         "s3:GetObjectVersionTagging"
+        "s3:GetObjectVersionTagging"
       ],
       "Effect": "Allow",
       "Resource": [
