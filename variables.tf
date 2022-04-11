@@ -274,12 +274,13 @@ variable "tags" {
 variable "versioning" {
   description = "The state of versioning of the bucket"
   type        = string # (Required) The versioning state of the bucket. Valid values: Enabled, Suspended, or Disabled. Disabled should only be used when creating or importing resources that correspond to unversioned S3 buckets.
-  default     = "Disabled"
+  default     = "Enabled"
 }
 
 variable "lifecycle_rules" {
   type = list(object({
-    id = string # (Required) Unique identifier for the rule. status = string # (Required) Whether the rule is currently being applied. Valid values: Enabled or Disabled.
+    id     = string # (Required) Unique identifier for the rule. 
+    status = string # (Required) Whether the rule is currently being applied. Valid values: Enabled or Disabled.
 
     abort_incomplete_multipart_upload = object({
       days_after_initiation = number # number of days after which Amazon S3 aborts an incomplete multipart upload.
@@ -305,8 +306,9 @@ variable "lifecycle_rules" {
     })
 
     transitions = list(object({
-      date = string # Must be set to midnight UTC e.g. 2023-01-13T00:00:00Z.
-      days = number # Must be a positive integer storage_class = string # Valid Values: GLACIER, STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, DEEP_ARCHIVE, GLACIER_IR
+      date          = string # Must be set to midnight UTC e.g. 2023-01-13T00:00:00Z.
+      days          = number # Must be a positive integer 
+      storage_class = string # Valid Values: GLACIER, STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, DEEP_ARCHIVE, GLACIER_IR
     }))
 
     noncurrent_version_expiration = object({
