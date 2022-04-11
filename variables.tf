@@ -279,7 +279,7 @@ variable "versioning" {
 
 variable "lifecycle_rules" {
   type = list(object({
-    id     = string # (Required) Unique identifier for the rule. 
+    id     = string # (Required) Unique identifier for the rule.
     status = string # (Required) Whether the rule is currently being applied. Valid values: Enabled or Disabled.
 
     abort_incomplete_multipart_upload = object({
@@ -307,7 +307,7 @@ variable "lifecycle_rules" {
 
     transitions = list(object({
       date          = string # Must be set to midnight UTC e.g. 2023-01-13T00:00:00Z.
-      days          = number # Must be a positive integer 
+      days          = number # Must be a positive integer
       storage_class = string # Valid Values: GLACIER, STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, DEEP_ARCHIVE, GLACIER_IR
     }))
 
