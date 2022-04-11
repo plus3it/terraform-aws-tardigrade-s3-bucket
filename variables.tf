@@ -4,7 +4,7 @@ variable "bucket" {
   default     = null
   validation {
     condition     = var.bucket != null ? length(var.bucket) <= 63 : true
-    error_message = "Bucket name must be less or equal to 63 character in length."
+    error_message = "Bucket name must be <= to 63 character in length."
   }
 }
 
@@ -143,7 +143,8 @@ variable "replication_configuration" {
         #specify the replica ownership. Must be used in conjunction with 
         #access_control_translation override configuration.
         encryption_configuration = object({     # (Optional) A configuration 
-        #block that provides information about encryption. If source_selection_criteria is specified, you must specify this element
+        #block that provides information about encryption. If 
+        #source_selection_criteria is specified, you must specify this element
           replica_kms_key_id = string           # (Required) The ID (Key ARN 
           #or Alias ARN) of the customer managed AWS KMS key stored in AWS Key 
           #Management Service (KMS) for the destination bucket.
@@ -174,7 +175,8 @@ variable "replication_configuration" {
           status = string           # (Required) The status of the Destination 
           #Metrics. Either "Enabled" or "Disabled".
           time = object({           # (Required) A configuration block 
-          #specifying the time by which replication should be complete for all objects and operations on objects
+          #specifying the time by which replication should be complete for all 
+          #objects and operations on objects
             minutes = number        # (Required) Time in minutes. Valid 
             #values: 15.
           })
@@ -398,7 +400,8 @@ variable "lifecycle_rules" {
     filter = object({
       prefix                   = string      # (Optional) Prefix identifying 
       #one or more objects to which the rule applies.
-      tags                     = map(string) # (Optional) Key-value map of resource tags. All of these tags must exist in the object's tag set in 
+      tags                     = map(string) # (Optional) Key-value map of 
+      #resource tags. All of these tags must exist in the object's tag set in 
       #order for the rule to apply.
       object_size_greater_than = number      # (Optional) Minimum object size 
       #to which the rule applies. Value must be at least 0 if specified.
