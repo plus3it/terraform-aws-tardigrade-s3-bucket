@@ -20,7 +20,7 @@ module "create_lifecycles" {
 
       filter = {
         prefix                   = "aPrefix/"
-        tags                     = null
+        tag                      = null
         and                      = null
         object_size_greater_than = null
         object_size_less_than    = null
@@ -41,12 +41,27 @@ module "create_lifecycles" {
 
       noncurrent_version_expiration = null
 
-      noncurrent_version_transition = []
+      noncurrent_version_transitions = []
     },
     {
       id     = "expiredObjDelMarkers"
       status = "Enabled"
-      filter = null
+
+      filter = {
+        prefix = null
+        tag    = null
+        and = [{
+          prefix = null
+          tags = {
+            tagFilter  = "testing",
+            tagFilter2 = "123"
+          }
+          object_size_greater_than = null
+          object_size_less_than    = null
+        }]
+        object_size_greater_than = null
+        object_size_less_than    = null
+      }
 
       abort_incomplete_multipart_upload = {
         days_after_initiation = 7
@@ -66,7 +81,7 @@ module "create_lifecycles" {
 
       noncurrent_version_expiration = null
 
-      noncurrent_version_transition = []
+      noncurrent_version_transitions = []
     },
     {
       id     = "nonCurrentVersionsTransition"
@@ -74,7 +89,7 @@ module "create_lifecycles" {
 
       filter = {
         prefix                   = "anotherPrefix/"
-        tags                     = null
+        tag                      = null
         and                      = null
         object_size_greater_than = null
         object_size_less_than    = null
@@ -97,7 +112,7 @@ module "create_lifecycles" {
         newer_noncurrent_versions = 10
       }
 
-      noncurrent_version_transition = [{
+      noncurrent_version_transitions = [{
         noncurrent_days           = 50
         newer_noncurrent_versions = 10
         storage_class             = "GLACIER"

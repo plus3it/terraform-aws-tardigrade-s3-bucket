@@ -5,7 +5,8 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_s3_bucket_logging" "this" {
-  count  = var.logging == null ? 0 : 1
+  count = var.logging == null ? 0 : 1
+
   bucket = aws_s3_bucket.this.id
 
   target_bucket         = var.logging.target_bucket
@@ -13,7 +14,6 @@ resource "aws_s3_bucket_logging" "this" {
   expected_bucket_owner = var.logging.expected_bucket_owner
 
   dynamic "target_grant" {
-    iterator = target_grant
     for_each = var.logging.target_grants != null ? var.logging.target_grants : []
 
     content {
@@ -32,13 +32,8 @@ resource "aws_s3_bucket_ownership_controls" "this" {
   count  = var.ownership_controls == null ? 0 : 1
   bucket = aws_s3_bucket.this.id
 
-  dynamic "rule" {
-    iterator = rule
-    for_each = var.ownership_controls.rule != null ? [var.ownership_controls.rule] : []
-
-    content {
-      object_ownership = rule.value.object_ownership
-    }
+  rule {
+    object_ownership = var.ownership_controls.rule.object_ownership
   }
 }
 
@@ -74,7 +69,7 @@ resource "aws_s3_bucket_intelligent_tiering_configuration" "this" {
   status = var.intelligent_tiering_configuration.status
 
   dynamic "tiering" {
-    for_each = var.intelligent_tiering_configuration.tiering != null ? var.intelligent_tiering_configuration.tiering : []
+    for_each = var.intelligent_tiering_configuration.tiering
     content {
       access_tier = tiering.value.access_tier
       days        = tiering.value.days
@@ -162,7 +157,7 @@ resource "aws_s3_bucket_replication_configuration" "this" {
         content {
           prefix = filter.value.prefix
           dynamic "tag" {
-            for_each = filter.value.tags != null ? [filter.value.tags] : []
+            for_each = filter.value.tag != null ? [filter.value.tag] : []
             content {
               key   = tag.value.key
               value = tag.value.value
@@ -262,12 +257,13 @@ resource "aws_s3_bucket_acl" "with_grants" {
 }
 
 resource "aws_s3_bucket_policy" "this" {
-  count  = var.create_policy == true ? 1 : 0
+  count  = var.create_policy ? 1 : 0
   bucket = aws_s3_bucket.this.id
   policy = var.policy
 }
 
 resource "aws_s3_bucket_versioning" "this" {
+  count  = var.versioning == null ? 0 : 1
   bucket = aws_s3_bucket.this.id
   versioning_configuration {
     status = var.versioning
@@ -275,17 +271,14 @@ resource "aws_s3_bucket_versioning" "this" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
-  count  = var.server_side_encryption ? 1 : 0
+  count  = var.server_side_encryption_configuration == null ? 0 : 1
   bucket = aws_s3_bucket.this.id
 
-  dynamic "rule" {
-    iterator = sse_config
-    for_each = var.server_side_encryption_configuration
-    content {
-      apply_server_side_encryption_by_default {
-        sse_algorithm     = lookup(sse_config.value, "sse_algorithm", null)
-        kms_master_key_id = lookup(sse_config.value, "kms_master_key_id", null)
-      }
+  rule {
+    bucket_key_enabled = var.server_side_encryption_configuration.bucket_key_enabled
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = var.server_side_encryption_configuration.sse_algorithm
+      kms_master_key_id = var.server_side_encryption_configuration.kms_master_key_id
     }
   }
 }
@@ -295,15 +288,14 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
   bucket = aws_s3_bucket.this.id
 
   dynamic "rule" {
-    iterator = lifecycle_rule
     for_each = var.lifecycle_rules
 
     content {
-      id     = lifecycle_rule.value.id
-      status = lifecycle_rule.value.status
+      id     = rule.value.id
+      status = rule.value.status
 
       dynamic "abort_incomplete_multipart_upload" {
-        for_each = lifecycle_rule.value.abort_incomplete_multipart_upload != null ? [lifecycle_rule.value.abort_incomplete_multipart_upload] : []
+        for_each = rule.value.abort_incomplete_multipart_upload != null ? [rule.value.abort_incomplete_multipart_upload] : []
 
         content {
           days_after_initiation = abort_incomplete_multipart_upload.value.days_after_initiation
@@ -311,14 +303,14 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
       }
 
       dynamic "filter" {
-        for_each = lifecycle_rule.value.filter != null ? [lifecycle_rule.value.filter] : []
+        for_each = rule.value.filter != null ? [rule.value.filter] : []
 
         content {
           prefix                   = filter.value.prefix
           object_size_greater_than = filter.value.object_size_greater_than
           object_size_less_than    = filter.value.object_size_less_than
           dynamic "tag" {
-            for_each = filter.value.tags != null ? [filter.value.tags] : []
+            for_each = filter.value.tag != null ? [filter.value.tag] : []
 
             content {
               key   = tag.value.key
@@ -326,7 +318,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
             }
           }
           dynamic "and" {
-            for_each = filter.value.and != null ? [filter.value.and] : []
+            for_each = filter.value.and != null ? filter.value.and : []
 
             content {
               prefix                   = and.value.prefix
@@ -339,7 +331,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
       }
 
       dynamic "expiration" {
-        for_each = lifecycle_rule.value.expiration != null ? [lifecycle_rule.value.expiration] : []
+        for_each = rule.value.expiration != null ? [rule.value.expiration] : []
 
         content {
           date                         = expiration.value.date
@@ -350,7 +342,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
 
       dynamic "transition" {
         iterator = transition
-        for_each = lifecycle_rule.value.transitions != null ? lifecycle_rule.value.transitions : []
+        for_each = rule.value.transitions != null ? rule.value.transitions : []
 
         content {
           date          = transition.value.date
@@ -360,7 +352,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
       }
 
       dynamic "noncurrent_version_expiration" {
-        for_each = lifecycle_rule.value.noncurrent_version_expiration != null ? [lifecycle_rule.value.noncurrent_version_expiration] : []
+        for_each = rule.value.noncurrent_version_expiration != null ? [rule.value.noncurrent_version_expiration] : []
 
         content {
           noncurrent_days           = noncurrent_version_expiration.value.noncurrent_days
@@ -369,7 +361,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
       }
 
       dynamic "noncurrent_version_transition" {
-        for_each = lifecycle_rule.value.noncurrent_version_transition != null ? lifecycle_rule.value.noncurrent_version_transition : []
+        for_each = rule.value.noncurrent_version_transitions != null ? rule.value.noncurrent_version_transitions : []
 
         content {
           noncurrent_days           = noncurrent_version_transition.value.noncurrent_days

@@ -11,21 +11,21 @@ provider "aws" {
 resource "aws_iam_role" "replication" {
   name = "tf-iam-role-replication-12345"
 
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
+  assume_role_policy = <<-POLICY
     {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "s3.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Principal": {
+            "Service": "s3.amazonaws.com"
+          },
+          "Effect": "Allow",
+          "Sid": ""
+        }
+      ]
     }
-  ]
-}
-POLICY
+  POLICY
 }
 
 resource "aws_iam_policy" "replication" {
@@ -91,8 +91,6 @@ resource "aws_s3_bucket_versioning" "destination" {
 module "create_bucket" {
   source = "../../"
 
-  //depends_on = [aws_s3_bucket_versioning.destination]
-
   bucket = random_id.name.hex
 
   acl        = "private"
@@ -122,7 +120,7 @@ module "create_bucket" {
 
         filter = {
           prefix = "foo"
-          tags = {
+          tag = {
             key   = "Name"
             value = "Foo"
           }

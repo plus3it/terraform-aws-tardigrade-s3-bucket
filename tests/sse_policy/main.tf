@@ -16,10 +16,9 @@ module "sse_policy" {
     environment = "testing"
   }
 
-  server_side_encryption = true
-
-  server_side_encryption_configuration = [{
-    "sse_algorithm"     = "aws:kms"
-    "kms_master_key_id" = aws_kms_key.this.arn
-  }]
+  server_side_encryption_configuration = {
+    bucket_key_enabled = true
+    sse_algorithm      = "aws:kms"
+    kms_master_key_id  = aws_kms_key.this.arn
+  }
 }

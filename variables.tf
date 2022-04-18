@@ -4,7 +4,7 @@ variable "bucket" {
   default     = null
   validation {
     condition     = var.bucket != null ? length(var.bucket) <= 63 : true
-    error_message = "Bucket name must be <= to 63 character in length."
+    error_message = "Bucket name must be <= to 63 characters in length."
   }
 }
 
@@ -28,7 +28,7 @@ variable "logging" {
 }
 
 variable "ownership_controls" {
-  description = "List of schema objects for the S3 ownership controls"
+  description = "Schema object for the S3 ownership controls"
   type = object({
     rule = object({             # (Required) Configuration block with Ownership Controls rules.
       object_ownership = string # (Required) Object ownership. Valid values: BucketOwnerPreferred, ObjectWriter or BucketOwnerEnforced
@@ -47,10 +47,10 @@ variable "request_payment_configuration" {
 }
 
 variable "cors_configuration" {
-  description = "List of cors rules the S3 bucket"
+  description = "Schema object of CORS configurations for the S3 bucket"
   type = object({
     expected_bucket_owner = string  # (Optional, Forces new resource) The account ID of the expected bucket owner.
-    cors_rules = set(object({       # (Required) Set of origins and methods (cross-origin access that you want to allow). You can configure up to 100 rules.
+    cors_rules = list(object({      # (Required) Set of origins and methods (cross-origin access that you want to allow). You can configure up to 100 rules.
       allowed_headers = set(string) # (Optional) Set of Headers that are specified in the Access-Control-Request-Headers header.
       allowed_methods = set(string) # (Required) Set of HTTP methods that you allow the origin to execute. Valid values are GET, PUT, HEAD, POST, and DELETE.
       allowed_origins = set(string) # (Required) Set of origins you want customers to be able to access the bucket from.
@@ -71,9 +71,9 @@ variable "intelligent_tiering_configuration" {
       prefix = string      # (Optional) An object key name prefix that identifies the subset of objects to which the configuration applies.
       tags   = map(string) # (Optional) All of these tags must exist in the object's tag set in order for the configuration to apply.
     })
-    tiering = set(object({ # (Required) The S3 Intelligent-Tiering storage class tiers of the configuration
-      access_tier = string # (Required) S3 Intelligent-Tiering access tier. Valid values: ARCHIVE_ACCESS, DEEP_ARCHIVE_ACCESS.
-      days        = number # (Required) The number of consecutive days of no access after which an object will be eligible to be transitioned to the corresponding tier.
+    tiering = list(object({ # (Required) The S3 Intelligent-Tiering storage class tiers of the configuration
+      access_tier = string  # (Required) S3 Intelligent-Tiering access tier. Valid values: ARCHIVE_ACCESS, DEEP_ARCHIVE_ACCESS.
+      days        = number  # (Required) The number of consecutive days of no access after which an object will be eligible to be transitioned to the corresponding tier.
     }))
   })
   default = null
@@ -111,9 +111,12 @@ variable "replication_configuration" {
           })
         })
       })
-      filter = object({        # (Optional) Filter that identifies subset of objects to which the replication rule applies
-        prefix = string        # (Optional) An object key name prefix that identifies subset of objects to which the rule applies.
-        tags   = map(string)   # (Optional) A configuration block for specifying a tag key and value
+      filter = object({  # (Optional) Filter that identifies subset of objects to which the replication rule applies
+        prefix = string  # (Optional) An object key name prefix that identifies subset of objects to which the rule applies.
+        tag = object({   # (Optional) A configuration block for specifying a tag key and value
+          key   = string # (Required) Name of the object key
+          value = string # (Required) Value of the tag
+        })
         and = list(object({    # (Optional) A configuration block for specifying rule filters. This element is required only if you specify more than one filter.
           prefix = string      # (Optional) An object key name prefix that identifies subset of objects to which the rule applies.
           tags   = map(string) # (Optional) A map of tags (key and value pairs) that identifies a subset of objects to which the rule applies. The rule applies only to objects having all the tags in its tagset.
@@ -213,7 +216,7 @@ variable "notifications" {
 }
 
 variable "create_policy" {
-  description = "Enable or disable creating bucket policies"
+  description = "An IAM policy document in JSON format to apply to the bucket"
   type        = bool
   default     = false
 }
@@ -240,22 +243,7 @@ variable "public_access_block" {
   }
 }
 
-variable "server_side_encryption" {
-  description = "Enable or disable bucket server-side encrpyption"
-  type        = bool
-  default     = false
-}
-
 variable "server_side_encryption_configuration" {
-  description = "The values to be applied to the bucket server side encryption configuration"
-  type        = list(any)
-  default = [{
-    "sse_algorithm"     = "aws:kms"
-    "kms_master_key_id" = null
-  }]
-}
-
-/*variable "server_side_encryption_configuration" {
   description = "Schema object of the server side encryption configuration"
   type = object({
     bucket_key_enabled = bool
@@ -263,7 +251,7 @@ variable "server_side_encryption_configuration" {
     kms_master_key_id  = string
   })
   default = null
-} */
+}
 
 variable "tags" {
   description = "The tags applied to the bucket"
@@ -274,7 +262,11 @@ variable "tags" {
 variable "versioning" {
   description = "The state of versioning of the bucket"
   type        = string # (Required) The versioning state of the bucket. Valid values: Enabled, Suspended, or Disabled. Disabled should only be used when creating or importing resources that correspond to unversioned S3 buckets.
-  default     = "Enabled"
+  default     = null
+  validation {
+    condition     = var.versioning != null ? contains(["Enabled", "Disabled", "Suspended"], var.versioning) : true
+    error_message = "The versioning state of the bucket. Valid values: Enabled, Suspended, or Disabled."
+  }
 }
 
 variable "lifecycle_rules" {
@@ -287,11 +279,14 @@ variable "lifecycle_rules" {
     })
 
     filter = object({
-      prefix                   = string      # (Optional) Prefix identifying one or more objects to which the rule applies.
-      tags                     = map(string) # (Optional) Key-value map of resource tags. All of these tags must exist in the object's tag set in order for the rule to apply.
-      object_size_greater_than = number      # (Optional) Minimum object size to which the rule applies. Value must be at least 0 if specified.
-      object_size_less_than    = number      # (Optional) Maximum object size to which the rule applies. Value must be at least 1 if specified.
-      and = list(object({                    # (Optional) Configuration block used to apply a logical AND to two or more predicates
+      prefix = string  # (Optional) Prefix identifying one or more objects to which the rule applies.
+      tag = object({   # (Optional) A configuration block for specifying a tag key and value
+        key   = string # (Required) Name of the object key
+        value = string # (Required) Value of the tag
+      })
+      object_size_greater_than = number # (Optional) Minimum object size to which the rule applies. Value must be at least 0 if specified.
+      object_size_less_than    = number # (Optional) Maximum object size to which the rule applies. Value must be at least 1 if specified.
+      and = list(object({               # (Optional) Configuration block used to apply a logical AND to two or more predicates
         prefix                   = string
         tags                     = map(string)
         object_size_greater_than = number
@@ -316,7 +311,7 @@ variable "lifecycle_rules" {
       newer_noncurrent_versions = number # number of noncurrent versions Amazon S3 will retain. Must be a non-zero positive integer.
     })
 
-    noncurrent_version_transition = list(object({
+    noncurrent_version_transitions = list(object({
       noncurrent_days           = number # days an object is noncurrent before Amazon S3 can perform the associated action. Must be a positive integer.
       newer_noncurrent_versions = number # number of noncurrent versions Amazon S3 will retain. Must be a non-zero positive integer.
       storage_class             = string # Valid Values: GLACIER, STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, DEEP_ARCHIVE, GLACIER_IR
