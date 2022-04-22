@@ -28,7 +28,7 @@ jobs:
         - make docker-compose/install
         - make mockstack/up
       # moto has not implemented the bucket_inventory_configuration yet, so the CI test fails while running pytest.  The test passes when run against an actual AWS account.  We need to remove the following PYTEST_ARGS filter when moto catches up.
-      script: make mockstack/pytest PYTEST_ARGS="-k 'not create_bucket_inventory'"
+      script: make mockstack/pytest PYTEST_ARGS="-k 'not create_inventory'"
       after_script:
         - make mockstack/clean
     - stage: deploy

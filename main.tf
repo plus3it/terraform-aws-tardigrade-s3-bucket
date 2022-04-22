@@ -196,27 +196,27 @@ resource "aws_s3_bucket_replication_configuration" "this" {
 }
 
 resource "aws_s3_bucket_inventory" "this" {
-  count                    = var.bucket_inventory == null ? 0 : 1
+  count                    = var.inventory == null ? 0 : 1
   bucket                   = aws_s3_bucket.this.id
-  name                     = var.bucket_inventory.name
-  included_object_versions = var.bucket_inventory.included_object_versions
-  enabled                  = var.bucket_inventory.enabled
+  name                     = var.inventory.name
+  included_object_versions = var.inventory.included_object_versions
+  enabled                  = var.inventory.enabled
 
   schedule {
-    frequency = var.bucket_inventory.schedule.frequency
+    frequency = var.inventory.schedule.frequency
   }
 
   destination {
     bucket {
-      bucket_arn = var.bucket_inventory.destination.bucket.bucket_arn
-      format     = var.bucket_inventory.destination.bucket.format
-      account_id = var.bucket_inventory.destination.bucket.account_id
-      prefix     = var.bucket_inventory.destination.bucket.prefix
+      bucket_arn = var.inventory.destination.bucket.bucket_arn
+      format     = var.inventory.destination.bucket.format
+      account_id = var.inventory.destination.bucket.account_id
+      prefix     = var.inventory.destination.bucket.prefix
     }
   }
 
   dynamic "filter" {
-    for_each = var.bucket_inventory.filter != null ? [var.bucket_inventory.filter] : []
+    for_each = var.inventory.filter != null ? [var.inventory.filter] : []
     content {
       prefix = filter.value.prefix
     }

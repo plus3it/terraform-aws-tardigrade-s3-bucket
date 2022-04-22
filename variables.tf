@@ -134,7 +134,7 @@ variable "replication_configuration" {
   default = null
 }
 
-variable "bucket_inventory" {
+variable "inventory" {
   description = "Schema object of the S3 bucket inventory configuration"
   type = object({
     name                     = string # (Required) Unique identifier of the inventory configuration for the bucket.

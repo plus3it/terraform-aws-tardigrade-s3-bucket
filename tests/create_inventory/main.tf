@@ -12,7 +12,7 @@ module "create_bucket" {
 
   bucket = random_id.name.hex
 
-  bucket_inventory = {
+  inventory = {
 
     name                     = "EntireBucketDaily"
     included_object_versions = "All"
