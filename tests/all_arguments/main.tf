@@ -152,7 +152,7 @@ module "all_arguments" {
   # logging
   logging = {
     expected_bucket_owner = null
-    target_bucket         = aws_s3_bucket.logging.id
+    target_bucket         = aws_s3_bucket_acl.logging.bucket
     target_prefix         = "log/"
     target_grants         = null
   }

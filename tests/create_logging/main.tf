@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "log_bucket" {
   bucket = format("%s-%s", "logging", random_id.name.hex)
 }
 
-resource "aws_s3_bucket_acl" "log_bucket_acl" {
+resource "aws_s3_bucket_acl" "log_bucket" {
   bucket = aws_s3_bucket.log_bucket.id
   acl    = "log-delivery-write"
 }
@@ -20,7 +20,7 @@ module "create_logging" {
 
   logging = {
     expected_bucket_owner = null
-    target_bucket         = aws_s3_bucket.log_bucket.id
+    target_bucket         = aws_s3_bucket_acl.log_bucket.bucket
     target_prefix         = "log/"
     target_grants         = null
   }
