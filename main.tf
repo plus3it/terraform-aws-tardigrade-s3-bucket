@@ -89,7 +89,7 @@ resource "aws_s3_bucket_intelligent_tiering_configuration" "this" {
 resource "aws_s3_bucket_replication_configuration" "this" {
   count = var.replication_configuration == null ? 0 : 1
 
-  bucket = aws_s3_bucket.this.id
+  bucket = aws_s3_bucket_versioning.this[0].bucket
   role   = var.replication_configuration.role
 
   dynamic "rule" {
