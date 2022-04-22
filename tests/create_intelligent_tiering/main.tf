@@ -3,7 +3,7 @@ resource "random_id" "name" {
   prefix      = "tardigrade-s3-bucket-"
 }
 
-module "create_bucket" {
+module "create_intelligent_tiering" {
   source = "../../"
 
   bucket = random_id.name.hex
@@ -34,6 +34,6 @@ module "create_bucket" {
   }
 }
 
-output "create_bucket" {
-  value = module.create_bucket
+output "create_intelligent_tiering" {
+  value = module.create_intelligent_tiering
 }

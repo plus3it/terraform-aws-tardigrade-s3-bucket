@@ -10,12 +10,15 @@ resource "random_id" "name" {
 module "create_policy" {
   source = "../../"
 
+  bucket        = random_id.name.hex
   create_policy = true
-
-  bucket = random_id.name.hex
 
   policy = templatefile("${path.module}/templates/config_bucket_policy.json", {
     bucket    = random_id.name.hex
     partition = local.partition
   })
+}
+
+output "create_policy" {
+  value = module.create_policy
 }

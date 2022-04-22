@@ -8,7 +8,7 @@ resource "random_id" "name" {
 module "create_grants" {
   source = "../../"
 
-  acl = null
+  bucket = random_id.name.hex
 
   grants = [
     {
@@ -30,12 +30,12 @@ module "create_grants" {
       uri         = "http://acs.amazonaws.com/groups/s3/LogDelivery"
     },
   ]
-  bucket = random_id.name.hex
+
   tags = {
     environment = "testing"
   }
 }
 
-output "create_bucket" {
+output "create_grants" {
   value = module.create_grants
 }

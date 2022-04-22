@@ -3,7 +3,7 @@ resource "random_id" "name" {
   prefix      = "tardigrade-s3-bucket-"
 }
 
-module "create_bucket" {
+module "create_public_access_block" {
   source = "../../"
 
   bucket = random_id.name.hex
@@ -19,4 +19,8 @@ module "create_bucket" {
   tags = {
     environment = "testing"
   }
+}
+
+output "create_public_access_block" {
+  value = module.create_public_access_block
 }

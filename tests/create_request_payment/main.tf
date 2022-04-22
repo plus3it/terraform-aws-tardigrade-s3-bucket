@@ -3,7 +3,7 @@ resource "random_id" "name" {
   prefix      = "tardigrade-s3-bucket-"
 }
 
-module "create_bucket" {
+module "create_request_payment_configuration" {
   source = "../../"
 
   bucket = random_id.name.hex
@@ -14,6 +14,6 @@ module "create_bucket" {
   }
 }
 
-output "create_bucket" {
-  value = module.create_bucket
+output "create_request_payment_configuration" {
+  value = module.create_request_payment_configuration
 }

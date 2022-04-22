@@ -3,7 +3,7 @@ resource "random_id" "name" {
   prefix      = "tardigrade-s3-bucket-"
 }
 
-module "create_bucket" {
+module "create_notifications" {
   source = "../../"
 
   bucket = random_id.name.hex
@@ -11,7 +11,7 @@ module "create_bucket" {
   notifications = {
     lambda_functions = [
       {
-        lambda_function_arn = module.lambda.function_arn
+        lambda_function_arn = "arn:${data.aws_partition.current.partition}:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${aws_lambda_permission.this.function_name}"
         events              = ["s3:ObjectCreated:*"]
         filter_prefix       = null
         filter_suffix       = null
@@ -38,10 +38,6 @@ module "create_bucket" {
   tags = {
     environment = "testing"
   }
-
-  depends_on = [
-    aws_lambda_permission.this,
-  ]
 }
 
 module "lambda" {
@@ -76,7 +72,6 @@ resource "aws_sns_topic_policy" "this" {
 resource "aws_sqs_queue" "this" {
   name = random_id.name.hex
 
-
   policy = templatefile("templates/sqs_policy.json", {
     account_id  = data.aws_caller_identity.current.account_id
     bucket_name = random_id.name.hex
@@ -91,6 +86,6 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-output "create_bucket" {
-  value = module.create_bucket
+output "create_notifications" {
+  value = module.create_notifications
 }

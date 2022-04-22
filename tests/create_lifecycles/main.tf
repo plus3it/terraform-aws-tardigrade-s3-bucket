@@ -6,7 +6,7 @@ resource "random_id" "name" {
 module "create_lifecycles" {
   source = "../../"
 
-  acl = null
+  bucket = random_id.name.hex
 
   lifecycle_rules = [
     {
@@ -117,13 +117,11 @@ module "create_lifecycles" {
       }]
   }]
 
-
-  bucket = random_id.name.hex
   tags = {
     environment = "testing"
   }
 }
 
-output "create_bucket" {
+output "create_lifecycles" {
   value = module.create_lifecycles
 }

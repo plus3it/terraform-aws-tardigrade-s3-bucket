@@ -3,13 +3,14 @@ resource "random_id" "name" {
   prefix      = "tardigrade-s3-bucket-"
 }
 
-module "create_bucket" {
+module "create_cors_configuration" {
   source = "../../"
 
   bucket = random_id.name.hex
 
   cors_configuration = {
     expected_bucket_owner = null
+
     cors_rules = [
       {
         allowed_headers = ["*"]
@@ -31,6 +32,6 @@ module "create_bucket" {
   }
 }
 
-output "create_bucket" {
-  value = module.create_bucket
+output "create_cors_configuration" {
+  value = module.create_cors_configuration
 }

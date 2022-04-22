@@ -3,11 +3,11 @@ resource "random_id" "name" {
   prefix      = "tardigrade-s3-bucket-"
 }
 
-module "create_bucket" {
+module "create_ownership_controls" {
   source = "../../"
 
-  acl    = "private"
   bucket = random_id.name.hex
+  acl    = "private"
 
   ownership_controls = {
     rule = {
@@ -16,6 +16,6 @@ module "create_bucket" {
   }
 }
 
-output "create_bucket" {
-  value = module.create_bucket
+output "create_ownership_controls" {
+  value = module.create_ownership_controls
 }

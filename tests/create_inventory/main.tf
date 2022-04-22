@@ -7,13 +7,12 @@ resource "aws_s3_bucket" "inventory" {
   bucket = format("%s-%s", "inventory", random_id.name.hex)
 }
 
-module "create_bucket" {
+module "create_inventory" {
   source = "../../"
 
   bucket = random_id.name.hex
 
   inventory = {
-
     name                     = "EntireBucketDaily"
     included_object_versions = "All"
     enabled                  = true
@@ -33,4 +32,8 @@ module "create_bucket" {
       }
     }
   }
+}
+
+output "create_inventory" {
+  value = module.create_inventory
 }

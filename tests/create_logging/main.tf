@@ -12,20 +12,20 @@ resource "aws_s3_bucket_acl" "log_bucket_acl" {
   acl    = "log-delivery-write"
 }
 
-module "create_bucket" {
+module "create_logging" {
   source = "../../"
 
-  acl    = "private"
   bucket = random_id.name.hex
+  acl    = "private"
 
   logging = {
+    expected_bucket_owner = null
     target_bucket         = aws_s3_bucket.log_bucket.id
     target_prefix         = "log/"
-    expected_bucket_owner = null
     target_grants         = null
   }
 }
 
-output "create_bucket" {
-  value = module.create_bucket
+output "create_logging" {
+  value = module.create_logging
 }
