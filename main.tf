@@ -229,7 +229,9 @@ resource "aws_s3_bucket_acl" "with_acl" {
   acl    = var.acl
 }
 
-data "aws_canonical_user_id" "current" {}
+data "aws_canonical_user_id" "current" {
+  count = length(var.grants) == 0 ? 0 : 1
+}
 
 resource "aws_s3_bucket_acl" "with_grants" {
   count  = length(var.grants) == 0 ? 0 : 1
@@ -251,7 +253,7 @@ resource "aws_s3_bucket_acl" "with_grants" {
     }
 
     owner {
-      id = data.aws_canonical_user_id.current.id
+      id = data.aws_canonical_user_id.current[0].id
     }
   }
 }
