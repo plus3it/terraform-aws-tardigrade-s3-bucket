@@ -63,9 +63,7 @@ module "create_lifecycles" {
         object_size_less_than    = null
       }
 
-      abort_incomplete_multipart_upload = {
-        days_after_initiation = 7
-      }
+      abort_incomplete_multipart_upload = null
 
       expiration = {
         date                         = null
