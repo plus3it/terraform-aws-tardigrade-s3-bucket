@@ -215,16 +215,12 @@ variable "notifications" {
   }
 }
 
-variable "create_policy" {
-  description = "An IAM policy document in JSON format to apply to the bucket"
-  type        = bool
-  default     = false
-}
-
 variable "policy" {
-  description = "An IAM policy document in JSON format to apply to the bucket"
-  type        = string
-  default     = null
+  description = "A schema object with an IAM policy document in JSON format to apply to the bucket"
+  type = object({
+    json = string
+  })
+  default = null
 }
 
 variable "public_access_block" {

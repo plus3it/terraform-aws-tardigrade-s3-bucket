@@ -286,10 +286,10 @@ resource "aws_s3_bucket_acl" "with_grants" {
 }
 
 resource "aws_s3_bucket_policy" "this" {
-  count = var.create_policy ? 1 : 0
+  count = var.policy == null ? 0 : 1
 
   bucket = aws_s3_bucket.this.id
-  policy = var.policy
+  policy = var.policy.json
 }
 
 resource "aws_s3_bucket_versioning" "this" {

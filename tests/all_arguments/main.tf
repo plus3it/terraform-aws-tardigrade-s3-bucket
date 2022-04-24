@@ -179,10 +179,12 @@ module "all_arguments" {
   }
 
   # policy
-  policy = templatefile("${path.module}/templates/basic_bucket_policy.json", {
-    bucket    = random_id.name.hex
-    partition = data.aws_partition.current.partition
-  })
+  policy = {
+    json = templatefile("${path.module}/templates/basic_bucket_policy.json", {
+      bucket    = random_id.name.hex
+      partition = data.aws_partition.current.partition
+    })
+  }
 
   # public_access_block
   public_access_block = {
