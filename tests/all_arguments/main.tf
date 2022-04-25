@@ -18,7 +18,6 @@ module "all_arguments" {
 
   # cors_configuration
   cors_configuration = {
-    expected_bucket_owner = null
     cors_rules = [
       {
         allowed_headers = ["*"]
@@ -151,10 +150,9 @@ module "all_arguments" {
 
   # logging
   logging = {
-    expected_bucket_owner = null
-    target_bucket         = aws_s3_bucket_acl.logging.bucket
-    target_prefix         = "log/"
-    target_grants         = null
+    target_bucket = aws_s3_bucket_acl.logging.bucket
+    target_prefix = "log/"
+    target_grants = null
   }
 
   # notifications
@@ -230,8 +228,7 @@ module "all_arguments" {
 
   # request_payment_configuration
   request_payment_configuration = {
-    expected_bucket_owner = null
-    payer                 = "Requester"
+    payer = "Requester"
   }
 
   # server_side_encryption_configuration

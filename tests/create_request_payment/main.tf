@@ -9,8 +9,7 @@ module "create_request_payment_configuration" {
   bucket = random_id.name.hex
 
   request_payment_configuration = {
-    expected_bucket_owner = null
-    payer                 = "Requester"
+    payer = "Requester"
   }
 }
 

@@ -11,9 +11,8 @@ variable "bucket" {
 variable "logging" {
   description = "Schema object for the S3 bucket logging configuration"
   type = object({
-    target_bucket         = string # (Required) The name of the bucket where you want Amazon S3 to store server access logs.
-    target_prefix         = string # (Required) A prefix for all log object keys.
-    expected_bucket_owner = string # (Optional, Forces new resource) The account ID of the expected bucket owner.
+    target_bucket = string # (Required) The name of the bucket where you want Amazon S3 to store server access logs.
+    target_prefix = string # (Required) A prefix for all log object keys.
     target_grants = list(object({
       grantee = object({
         email_address = string # (Optional) Email address of the grantee. See Regions and Endpoints for supported AWS regions where this argument can be specified.
@@ -44,8 +43,7 @@ variable "ownership_controls" {
 variable "request_payment_configuration" {
   description = "Request payment configuration for the S3 bucket"
   type = object({
-    expected_bucket_owner = string # (Optional, Forces new resource) The account ID of the expected bucket owner.
-    payer                 = string # (Required) Specifies who pays for the download and request fees. Valid values: BucketOwner, Requester.
+    payer = string # (Required) Specifies who pays for the download and request fees. Valid values: BucketOwner, Requester.
   })
   default = null
   validation {
@@ -57,7 +55,6 @@ variable "request_payment_configuration" {
 variable "cors_configuration" {
   description = "Schema object of CORS configurations for the S3 bucket"
   type = object({
-    expected_bucket_owner = string  # (Optional, Forces new resource) The account ID of the expected bucket owner.
     cors_rules = list(object({      # (Required) Set of origins and methods (cross-origin access that you want to allow). You can configure up to 100 rules.
       allowed_headers = set(string) # (Optional) Set of Headers that are specified in the Access-Control-Request-Headers header.
       allowed_methods = set(string) # (Required) Set of HTTP methods that you allow the origin to execute. Valid values are GET, PUT, HEAD, POST, and DELETE.

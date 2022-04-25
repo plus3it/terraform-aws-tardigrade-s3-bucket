@@ -9,8 +9,6 @@ module "create_cors_configuration" {
   bucket = random_id.name.hex
 
   cors_configuration = {
-    expected_bucket_owner = null
-
     cors_rules = [
       {
         allowed_headers = ["*"]

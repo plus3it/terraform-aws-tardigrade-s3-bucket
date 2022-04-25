@@ -8,10 +8,9 @@ resource "aws_s3_bucket" "this" {
 resource "aws_s3_bucket_logging" "this" {
   count = var.logging == null ? 0 : 1
 
-  bucket                = aws_s3_bucket.this.id
-  expected_bucket_owner = var.logging.expected_bucket_owner
-  target_bucket         = var.logging.target_bucket
-  target_prefix         = var.logging.target_prefix
+  bucket        = aws_s3_bucket.this.id
+  target_bucket = var.logging.target_bucket
+  target_prefix = var.logging.target_prefix
 
   dynamic "target_grant" {
     for_each = var.logging.target_grants != null ? var.logging.target_grants : []
@@ -41,16 +40,14 @@ resource "aws_s3_bucket_ownership_controls" "this" {
 resource "aws_s3_bucket_request_payment_configuration" "this" {
   count = var.request_payment_configuration == null ? 0 : 1
 
-  bucket                = aws_s3_bucket.this.id
-  expected_bucket_owner = var.request_payment_configuration.expected_bucket_owner
-  payer                 = var.request_payment_configuration.payer
+  bucket = aws_s3_bucket.this.id
+  payer  = var.request_payment_configuration.payer
 }
 
 resource "aws_s3_bucket_cors_configuration" "this" {
   count = var.cors_configuration == null ? 0 : 1
 
-  bucket                = aws_s3_bucket.this.id
-  expected_bucket_owner = var.cors_configuration.expected_bucket_owner
+  bucket = aws_s3_bucket.this.id
 
   dynamic "cors_rule" {
     for_each = var.cors_configuration.cors_rules
