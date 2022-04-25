@@ -19,22 +19,22 @@ module "create_grants" {
 
   grants = [
     {
-      id          = data.aws_canonical_user_id.current_user.id
-      type        = "CanonicalUser"
-      permissions = "READ"
-      uri         = null
+      id         = data.aws_canonical_user_id.current_user.id
+      type       = "CanonicalUser"
+      permission = "READ"
+      uri        = null
     },
     {
-      id          = null
-      type        = "Group"
-      permissions = "READ"
-      uri         = "http://acs.amazonaws.com/groups/s3/LogDelivery"
+      id         = null
+      type       = "Group"
+      permission = "READ"
+      uri        = "http://acs.amazonaws.com/groups/s3/LogDelivery"
     },
     {
-      id          = null
-      type        = "Group"
-      permissions = "WRITE"
-      uri         = "http://acs.amazonaws.com/groups/s3/LogDelivery"
+      id         = null
+      type       = "Group"
+      permission = "WRITE"
+      uri        = "http://acs.amazonaws.com/groups/s3/LogDelivery"
     },
   ]
 

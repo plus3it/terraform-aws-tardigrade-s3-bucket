@@ -271,7 +271,7 @@ resource "aws_s3_bucket_acl" "with_grants" {
           uri  = grant.value.uri
         }
 
-        permission = grant.value.permissions
+        permission = grant.value.permission
       }
     }
 

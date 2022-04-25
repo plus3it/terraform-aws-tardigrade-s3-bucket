@@ -182,10 +182,10 @@ variable "force_destroy" {
 variable "grants" {
   description = "A list of ACL policy grants. Conflicts with `acl`, which must be set to `null`"
   type = list(object({
-    id          = string
-    type        = string
-    permissions = string
-    uri         = string
+    id         = string
+    permission = string
+    type       = string
+    uri        = string
   }))
   default = []
 }
