@@ -251,18 +251,14 @@ resource "aws_s3_bucket_inventory" "this" {
 resource "aws_s3_bucket_acl" "with_acl" {
   count = var.acl == null ? 0 : 1
 
-  bucket = aws_s3_bucket.this.id
+  bucket = var.ownership_controls != null ? aws_s3_bucket_ownership_controls.this[0].bucket : aws_s3_bucket.this.id
   acl    = var.acl
-}
-
-data "aws_canonical_user_id" "current" {
-  count = length(var.grants) == 0 ? 0 : 1
 }
 
 resource "aws_s3_bucket_acl" "with_grants" {
   count = length(var.grants) == 0 ? 0 : 1
 
-  bucket = aws_s3_bucket.this.id
+  bucket = var.ownership_controls != null ? aws_s3_bucket_ownership_controls.this[0].bucket : aws_s3_bucket.this.id
 
   access_control_policy {
     dynamic "grant" {
@@ -289,7 +285,7 @@ resource "aws_s3_bucket_policy" "this" {
   count = var.policy == null ? 0 : 1
 
   bucket = aws_s3_bucket.this.id
-  policy = var.policy.json
+  policy = var.policy.json != null ? var.policy.json : local.default_bucket_policy
 }
 
 resource "aws_s3_bucket_versioning" "this" {

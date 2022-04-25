@@ -34,7 +34,11 @@ variable "ownership_controls" {
       object_ownership = string # (Required) Object ownership. Valid values: BucketOwnerPreferred, ObjectWriter or BucketOwnerEnforced
     })
   })
-  default = null
+  default = {
+    rule = {
+      object_ownership = "BucketOwnerEnforced"
+    }
+  }
 }
 
 variable "request_payment_configuration" {
@@ -243,10 +247,14 @@ variable "server_side_encryption_configuration" {
   description = "Schema object of the server side encryption configuration"
   type = object({
     bucket_key_enabled = bool
-    sse_algorithm      = string
     kms_master_key_id  = string
+    sse_algorithm      = string
   })
-  default = null
+  default = {
+    bucket_key_enabled = true
+    kms_master_key_id  = null
+    sse_algorithm      = "aws:kms"
+  }
 }
 
 variable "tags" {
@@ -258,7 +266,7 @@ variable "tags" {
 variable "versioning" {
   description = "The state of versioning of the bucket"
   type        = string # (Required) The versioning state of the bucket. Valid values: Enabled, Suspended, or Disabled. Disabled should only be used when creating or importing resources that correspond to unversioned S3 buckets.
-  default     = null
+  default     = "Enabled"
   validation {
     condition     = var.versioning != null ? contains(["Enabled", "Disabled", "Suspended"], var.versioning) : true
     error_message = "The versioning state of the bucket. Valid values: Enabled, Suspended, or Disabled."

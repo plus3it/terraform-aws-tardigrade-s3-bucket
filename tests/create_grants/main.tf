@@ -10,6 +10,13 @@ module "create_grants" {
 
   bucket = random_id.name.hex
 
+  # Cannot use "BucketOwnerEnforced" with grants
+  ownership_controls = {
+    rule = {
+      object_ownership = "BucketOwnerPreferred"
+    }
+  }
+
   grants = [
     {
       id          = data.aws_canonical_user_id.current_user.id

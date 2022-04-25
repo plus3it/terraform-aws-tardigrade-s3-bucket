@@ -7,7 +7,6 @@ module "force_destroy" {
   source = "../../"
 
   bucket        = random_id.name.hex
-  acl           = "private"
   force_destroy = true
 
   tags = {

@@ -7,7 +7,6 @@ module "create_public_access_block" {
   source = "../../"
 
   bucket = random_id.name.hex
-  acl    = "private"
 
   public_access_block = {
     block_public_acls       = false

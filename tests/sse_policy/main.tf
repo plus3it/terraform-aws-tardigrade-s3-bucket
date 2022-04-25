@@ -11,7 +11,6 @@ module "sse_policy" {
   source = "../../"
 
   bucket = random_id.name.hex
-  acl    = "private"
 
   tags = {
     environment = "testing"

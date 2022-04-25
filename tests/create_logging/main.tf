@@ -16,7 +16,6 @@ module "create_logging" {
   source = "../../"
 
   bucket = random_id.name.hex
-  acl    = "private"
 
   logging = {
     expected_bucket_owner = null
