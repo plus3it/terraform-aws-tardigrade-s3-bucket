@@ -48,6 +48,10 @@ variable "request_payment_configuration" {
     payer                 = string # (Required) Specifies who pays for the download and request fees. Valid values: BucketOwner, Requester.
   })
   default = null
+  validation {
+    condition     = var.request_payment_configuration != null ? var.request_payment_configuration.payer == "Requester" : true
+    error_message = "The `request_payment_configuration` only supports a `payer` value of: \"Requester\"."
+  }
 }
 
 variable "cors_configuration" {

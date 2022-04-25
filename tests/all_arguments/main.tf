@@ -231,7 +231,7 @@ module "all_arguments" {
   # request_payment_configuration
   request_payment_configuration = {
     expected_bucket_owner = null
-    payer                 = "BucketOwner"
+    payer                 = "Requester"
   }
 
   # server_side_encryption_configuration
