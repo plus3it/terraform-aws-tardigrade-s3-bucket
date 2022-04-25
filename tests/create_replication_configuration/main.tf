@@ -41,7 +41,7 @@ resource "aws_iam_role" "replication" {
             ],
             "Effect" : "Allow",
             "Resource" : [
-              "${module.create_replication_configuration.bucket.arn}"
+              "arn:aws:s3:::${random_id.name.hex}"
             ]
           },
           {
@@ -52,7 +52,7 @@ resource "aws_iam_role" "replication" {
             ],
             "Effect" : "Allow",
             "Resource" : [
-              "${module.create_replication_configuration.bucket.arn}/*"
+              "arn:aws:s3:::${random_id.name.hex}}/*"
             ]
           },
           {
