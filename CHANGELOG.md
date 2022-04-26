@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+### 5.0.0
+
+**Released**: 2022.04.26
+
+**Commit Delta**: [Change from 4.3.1 release](https://github.com/plus3it/terraform-aws-tardigrade-s3-bucket/compare/4.3.1...5.0.0)
+
+**Summary**:
+
+*   Supports AWS Provider v4
+*   Implements the new model using separate resources for all s3 bucket features
+*   Uses objects for all s3 bucket features to support all feature arguments
+
 ### 3.0.0
 
 **Released**: 2020.08.07
