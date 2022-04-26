@@ -6,8 +6,8 @@ resource "random_id" "name" {
 module "create_bucket" {
   source = "../../"
 
-  acl    = "private"
   bucket = random_id.name.hex
+
   tags = {
     environment = "testing"
   }

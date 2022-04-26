@@ -10,14 +10,19 @@ resource "aws_kms_key" "this" {
 module "sse_policy" {
   source = "../../"
 
-  acl    = "private"
   bucket = random_id.name.hex
+
   tags = {
     environment = "testing"
   }
 
-  server_side_encryption_configuration = [{
-    "sse_algorithm"     = "aws:kms"
-    "kms_master_key_id" = aws_kms_key.this.arn
-  }]
+  server_side_encryption_configuration = {
+    bucket_key_enabled = true
+    sse_algorithm      = "aws:kms"
+    kms_master_key_id  = aws_kms_key.this.arn
+  }
+}
+
+output "sse_policy" {
+  value = module.sse_policy
 }
