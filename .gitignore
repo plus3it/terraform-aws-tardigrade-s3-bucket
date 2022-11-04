@@ -19,4 +19,5 @@ tardigrade-ci/
 .terraform.lock.hcl
 
 # Cache created by pytest
-tests/__pycache__/
+__pycache__/
+.pyc
