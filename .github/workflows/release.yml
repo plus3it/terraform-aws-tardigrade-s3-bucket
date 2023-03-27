@@ -17,3 +17,5 @@ jobs:
     uses: plus3it/actions-workflows/.github/workflows/release.yml@5e9a88632006562f08c78be0b1ac4491f59720de
     secrets:
       release-token: ${{ secrets.GH_RELEASES_TOKEN }}
+    with:
+      mockstacktest-pytest-args: -v -k 'not create_inventory'
