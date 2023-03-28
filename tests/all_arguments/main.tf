@@ -244,8 +244,7 @@ resource "aws_s3_bucket" "inventory" {
 }
 
 resource "aws_s3_bucket" "logging" {
-  bucket = format("%s-%s", "logging", random_id.name.hex)
-  force_destroy = true
+  bucket        = format("%s-%s", "logging", random_id.name.hex)
 }
 
 resource "aws_s3_bucket_acl" "logging" {

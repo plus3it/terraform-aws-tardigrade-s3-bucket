@@ -4,7 +4,8 @@ resource "random_id" "name" {
 }
 
 resource "aws_s3_bucket" "log_bucket" {
-  bucket = format("%s-%s", "logging", random_id.name.hex)
+  bucket        = format("%s-%s", "logging", random_id.name.hex)
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_acl" "log_bucket" {
