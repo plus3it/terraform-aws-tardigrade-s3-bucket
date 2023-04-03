@@ -240,11 +240,13 @@ module "all_arguments" {
 }
 
 resource "aws_s3_bucket" "inventory" {
-  bucket = format("%s-%s", "inventory", random_id.name.hex)
+  bucket        = format("%s-%s", "inventory", random_id.name.hex)
+  force_destroy = true
 }
 
 resource "aws_s3_bucket" "logging" {
-  bucket = format("%s-%s", "logging", random_id.name.hex)
+  bucket        = format("%s-%s", "logging", random_id.name.hex)
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_acl" "logging" {
@@ -255,7 +257,8 @@ resource "aws_s3_bucket_acl" "logging" {
 resource "aws_s3_bucket" "replication" {
   provider = aws.west
 
-  bucket = format("%s-%s", "replication", random_id.name.hex)
+  bucket        = format("%s-%s", "replication", random_id.name.hex)
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_versioning" "replication" {

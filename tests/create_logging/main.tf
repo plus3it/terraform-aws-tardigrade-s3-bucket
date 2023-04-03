@@ -4,7 +4,8 @@ resource "random_id" "name" {
 }
 
 resource "aws_s3_bucket" "log_bucket" {
-  bucket = format("%s-%s", "logging", random_id.name.hex)
+  bucket        = format("%s-%s", "logging", random_id.name.hex)
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_acl" "log_bucket" {
@@ -15,7 +16,8 @@ resource "aws_s3_bucket_acl" "log_bucket" {
 module "create_logging" {
   source = "../../"
 
-  bucket = random_id.name.hex
+  bucket        = random_id.name.hex
+  force_destroy = true
 
   logging = {
     target_bucket = aws_s3_bucket_acl.log_bucket.bucket
