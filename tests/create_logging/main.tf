@@ -16,7 +16,8 @@ resource "aws_s3_bucket_acl" "log_bucket" {
 module "create_logging" {
   source = "../../"
 
-  bucket = random_id.name.hex
+  bucket        = random_id.name.hex
+  force_destroy = true
 
   logging = {
     target_bucket = aws_s3_bucket_acl.log_bucket.bucket

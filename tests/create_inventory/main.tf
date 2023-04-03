@@ -4,13 +4,15 @@ resource "random_id" "name" {
 }
 
 resource "aws_s3_bucket" "inventory" {
-  bucket = format("%s-%s", "inventory", random_id.name.hex)
+  bucket        = format("%s-%s", "inventory", random_id.name.hex)
+  force_destroy = true
 }
 
 module "create_inventory" {
   source = "../../"
 
-  bucket = random_id.name.hex
+  bucket        = random_id.name.hex
+  force_destroy = true
 
   inventory = {
     name                     = "EntireBucketDaily"

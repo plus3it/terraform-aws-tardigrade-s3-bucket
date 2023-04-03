@@ -73,7 +73,8 @@ resource "aws_iam_role" "replication" {
 resource "aws_s3_bucket" "destination" {
   provider = aws.west
 
-  bucket = format("%s-%s", "destination", random_id.name.hex)
+  bucket        = format("%s-%s", "destination", random_id.name.hex)
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_versioning" "destination" {
@@ -89,8 +90,9 @@ resource "aws_s3_bucket_versioning" "destination" {
 module "create_replication_configuration" {
   source = "../../"
 
-  bucket     = random_id.name.hex
-  versioning = "Enabled"
+  bucket        = random_id.name.hex
+  versioning    = "Enabled"
+  force_destroy = true
 
   replication_configuration = {
     role = aws_iam_role.replication.arn
