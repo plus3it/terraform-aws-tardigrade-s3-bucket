@@ -132,7 +132,7 @@ variable "replication_configuration" {
           status = string                  # (Required) Whether the existing objects should be replicated. Either "Enabled" or "Disabled".
         })
         sse_kms_encrypted_objects = object({ # (Optional) A configuration block for filter information for the selection of Amazon S3 objects encrypted with AWS KMS. If specified, replica_kms_key_id in destination encryption_configuration must be specified as well. 
-          status = string # (Required) Whether the existing objects should be replicated. Either "Enabled" or "Disabled".
+          status = string                    # (Required) Whether the existing objects should be replicated. Either "Enabled" or "Disabled".
         })
       })
     }))
