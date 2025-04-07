@@ -315,6 +315,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
 
   bucket = aws_s3_bucket.this.id
 
+  transition_default_minimum_object_size = "all_storage_classes_128K"
+
   dynamic "rule" {
     for_each = var.lifecycle_rules
 
