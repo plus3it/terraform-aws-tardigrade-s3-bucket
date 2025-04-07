@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+### [5.1.0](https://github.com/plus3it/terraform-aws-tardigrade-s3-bucket/releases/tag/5.1.0)
+
+**Released**: 2025.04.08
+
+**Summary**:
+
+*   Marks object attributes as optional wherever possible
+*   Updates tests to address various changes in APIs and the provider, as well
+    as address deprecation warnings
+
 ### 5.0.1
 
 **Released**: 2025.02.18
