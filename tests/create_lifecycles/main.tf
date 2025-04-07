@@ -68,7 +68,7 @@ module "create_lifecycles" {
       expiration = {
         date                         = null
         days                         = 45
-        expired_object_delete_marker = true
+        expired_object_delete_marker = null
       }
 
       transitions = [{
