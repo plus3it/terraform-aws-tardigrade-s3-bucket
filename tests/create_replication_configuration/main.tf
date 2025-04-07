@@ -101,29 +101,17 @@ module "create_replication_configuration" {
       {
         id                               = "foobar"
         delete_marker_replication_status = "Disabled"
-        priority                         = null
         status                           = "Enabled"
-        source_selection_criteria        = null
 
         destination = {
-          bucket                     = "arn:aws:s3:::${aws_s3_bucket_versioning.destination.id}"
-          storage_class              = "STANDARD"
-          access_control_translation = null
-          account                    = null
-          encryption_configuration   = null
-          metrics                    = null
-          replication_time           = null
+          bucket        = "arn:aws:s3:::${aws_s3_bucket_versioning.destination.id}"
+          storage_class = "STANDARD"
         }
 
         filter = {
           prefix = "foo"
-          tag = {
-            key   = "Name"
-            value = "Foo"
-          }
-          and = null
         }
-      }
+      },
     ]
   }
 }

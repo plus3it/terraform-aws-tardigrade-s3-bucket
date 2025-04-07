@@ -22,16 +22,13 @@ module "create_grants" {
       id         = data.aws_canonical_user_id.current_user.id
       type       = "CanonicalUser"
       permission = "READ"
-      uri        = null
     },
     {
-      id         = null
       type       = "Group"
       permission = "READ"
       uri        = "http://acs.amazonaws.com/groups/s3/LogDelivery"
     },
     {
-      id         = null
       type       = "Group"
       permission = "WRITE"
       uri        = "http://acs.amazonaws.com/groups/s3/LogDelivery"

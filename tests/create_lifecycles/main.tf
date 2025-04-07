@@ -19,78 +19,53 @@ module "create_lifecycles" {
       }
 
       filter = {
-        prefix                   = "aPrefix/"
-        tag                      = null
-        and                      = null
-        object_size_greater_than = null
-        object_size_less_than    = null
+        prefix = "aPrefix/"
       }
 
-      expiration = null
-
-      transitions = [{
-        date          = null
-        days          = 30
-        storage_class = "STANDARD_IA"
+      transitions = [
+        {
+          days          = 30
+          storage_class = "STANDARD_IA"
         },
         {
-          date          = null
           days          = 90
           storage_class = "GLACIER"
-      }]
-
-      noncurrent_version_expiration = null
-
-      noncurrent_version_transitions = []
+        },
+      ]
     },
     {
       id     = "expiredObjDelMarkers"
       status = "Enabled"
 
       filter = {
-        prefix = null
-        tag    = null
-        and = [{
-          prefix = null
-          tags = {
-            tagFilter  = "testing",
-            tagFilter2 = "123"
-          }
-          object_size_greater_than = null
-          object_size_less_than    = null
-        }]
-        object_size_greater_than = null
-        object_size_less_than    = null
+        and = [
+          {
+            prefix = null
+            tags = {
+              tagFilter  = "testing",
+              tagFilter2 = "123"
+            }
+          },
+        ]
       }
-
-      abort_incomplete_multipart_upload = null
 
       expiration = {
-        date                         = null
-        days                         = 45
-        expired_object_delete_marker = null
+        days = 45
       }
 
-      transitions = [{
-        date          = null
-        days          = 31
-        storage_class = "STANDARD_IA"
-      }]
-
-      noncurrent_version_expiration = null
-
-      noncurrent_version_transitions = []
+      transitions = [
+        {
+          days          = 31
+          storage_class = "STANDARD_IA"
+        },
+      ]
     },
     {
       id     = "nonCurrentVersionsTransition"
       status = "Enabled"
 
       filter = {
-        prefix                   = "anotherPrefix/"
-        tag                      = null
-        and                      = null
-        object_size_greater_than = null
-        object_size_less_than    = null
+        prefix = "anotherPrefix/"
       }
 
       abort_incomplete_multipart_upload = {
@@ -98,24 +73,23 @@ module "create_lifecycles" {
       }
 
       expiration = {
-        date                         = null
-        days                         = 95
-        expired_object_delete_marker = null
+        days = 95
       }
-
-      transitions = []
 
       noncurrent_version_expiration = {
         noncurrent_days           = 300
         newer_noncurrent_versions = 10
       }
 
-      noncurrent_version_transitions = [{
-        noncurrent_days           = 50
-        newer_noncurrent_versions = 10
-        storage_class             = "GLACIER"
-      }]
-  }]
+      noncurrent_version_transitions = [
+        {
+          noncurrent_days           = 50
+          newer_noncurrent_versions = 10
+          storage_class             = "GLACIER"
+        },
+      ]
+    }
+  ]
 
   tags = {
     environment = "testing"

@@ -7,7 +7,6 @@ module "all_arguments" {
   source = "../../"
 
   bucket        = random_id.name.hex
-  acl           = null
   force_destroy = true
   versioning    = "Enabled"
 
@@ -25,16 +24,11 @@ module "all_arguments" {
         allowed_origins = ["https://s3-website-test.hashicorp.com"]
         expose_headers  = ["ETag"]
         max_age_seconds = 3000
-        id              = null
       },
       {
-        allowed_headers = null
         allowed_methods = ["GET"]
         allowed_origins = ["*"]
-        expose_headers  = null
-        max_age_seconds = null
-        id              = null
-      }
+      },
     ]
   }
 
@@ -44,16 +38,13 @@ module "all_arguments" {
       id         = data.aws_canonical_user_id.current.id
       type       = "CanonicalUser"
       permission = "READ"
-      uri        = null
     },
     {
-      id         = null
       type       = "Group"
       permission = "READ"
       uri        = "http://acs.amazonaws.com/groups/s3/LogDelivery"
     },
     {
-      id         = null
       type       = "Group"
       permission = "WRITE"
       uri        = "http://acs.amazonaws.com/groups/s3/LogDelivery"
@@ -153,21 +144,16 @@ module "all_arguments" {
   logging = {
     target_bucket = aws_s3_bucket_policy.logging.bucket
     target_prefix = "log/"
-    target_grants = null
   }
 
   # notifications
   notifications = {
-    lambda_functions = []
     topics = [
       {
-        topic_arn     = aws_sns_topic_policy.notifications.arn
-        events        = ["s3:ObjectRemoved:*"]
-        filter_prefix = null
-        filter_suffix = null
-      }
+        topic_arn = aws_sns_topic_policy.notifications.arn
+        events    = ["s3:ObjectRemoved:*"]
+      },
     ]
-    queues = []
   }
 
   # ownership_controls
@@ -201,29 +187,17 @@ module "all_arguments" {
       {
         id                               = "foobar"
         delete_marker_replication_status = "Disabled"
-        priority                         = null
         status                           = "Enabled"
-        source_selection_criteria        = null
 
         destination = {
-          bucket                     = "arn:aws:s3:::${aws_s3_bucket_versioning.replication.id}"
-          storage_class              = "STANDARD"
-          access_control_translation = null
-          account                    = null
-          encryption_configuration   = null
-          metrics                    = null
-          replication_time           = null
+          bucket        = "arn:aws:s3:::${aws_s3_bucket_versioning.replication.id}"
+          storage_class = "STANDARD"
         }
 
         filter = {
-          prefix = "foo"
-          tag = {
-            key   = "Name"
-            value = "Foo"
-          }
-          and = null
+          prefix = "foo/"
         }
-      }
+      },
     ]
   }
 

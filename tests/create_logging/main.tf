@@ -7,7 +7,6 @@ module "create_logging" {
   logging = {
     target_bucket = aws_s3_bucket_policy.log_bucket.bucket
     target_prefix = "log/"
-    target_grants = null
   }
 }
 

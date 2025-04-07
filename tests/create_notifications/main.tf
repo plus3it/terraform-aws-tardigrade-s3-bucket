@@ -13,25 +13,19 @@ module "create_notifications" {
       {
         lambda_function_arn = "arn:${data.aws_partition.current.partition}:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${aws_lambda_permission.this.function_name}"
         events              = ["s3:ObjectCreated:*"]
-        filter_prefix       = null
-        filter_suffix       = null
-      }
+      },
     ]
     topics = [
       {
-        topic_arn     = aws_sns_topic_policy.this.arn
-        events        = ["s3:ObjectRemoved:*"]
-        filter_prefix = null
-        filter_suffix = null
-      }
+        topic_arn = aws_sns_topic_policy.this.arn
+        events    = ["s3:ObjectRemoved:*"]
+      },
     ]
     queues = [
       {
-        queue_arn     = aws_sqs_queue.this.arn
-        events        = ["s3:ObjectRestore:*"]
-        filter_prefix = null
-        filter_suffix = null
-      }
+        queue_arn = aws_sqs_queue.this.arn
+        events    = ["s3:ObjectRestore:*"]
+      },
     ]
   }
 
