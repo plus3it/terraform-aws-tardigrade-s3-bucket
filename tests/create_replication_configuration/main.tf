@@ -26,48 +26,49 @@ resource "aws_iam_role" "replication" {
       ]
     }
   )
+}
 
-  inline_policy {
-    name = "tf-iam-role-policy-replication-12345"
+resource "aws_iam_role_policy" "replication" {
+  name = "tf-iam-role-policy-replication-12345"
+  role = aws_iam_role.replication.id
 
-    policy = jsonencode(
-      {
-        "Version" : "2012-10-17",
-        "Statement" : [
-          {
-            "Action" : [
-              "s3:GetReplicationConfiguration",
-              "s3:ListBucket"
-            ],
-            "Effect" : "Allow",
-            "Resource" : [
-              "arn:aws:s3:::${random_id.name.hex}"
-            ]
-          },
-          {
-            "Action" : [
-              "s3:GetObjectVersionForReplication",
-              "s3:GetObjectVersionAcl",
-              "s3:GetObjectVersionTagging"
-            ],
-            "Effect" : "Allow",
-            "Resource" : [
-              "arn:aws:s3:::${random_id.name.hex}}/*"
-            ]
-          },
-          {
-            "Action" : [
-              "s3:ReplicateObject",
-              "s3:ReplicateDelete",
-              "s3:ReplicateTags"
-            ],
-            "Effect" : "Allow",
-            "Resource" : "${aws_s3_bucket.destination.arn}/*"
-          }
-        ]
-      }
-    )
-  }
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Action" : [
+            "s3:GetReplicationConfiguration",
+            "s3:ListBucket"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:s3:::${random_id.name.hex}"
+          ]
+        },
+        {
+          "Action" : [
+            "s3:GetObjectVersionForReplication",
+            "s3:GetObjectVersionAcl",
+            "s3:GetObjectVersionTagging"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:s3:::${random_id.name.hex}/*"
+          ]
+        },
+        {
+          "Action" : [
+            "s3:ReplicateObject",
+            "s3:ReplicateDelete",
+            "s3:ReplicateTags"
+          ],
+          "Effect" : "Allow",
+          "Resource" : "${aws_s3_bucket.destination.arn}/*"
+        }
+      ]
+    }
+  )
 }
 
 resource "aws_s3_bucket" "destination" {
@@ -95,7 +96,8 @@ module "create_replication_configuration" {
   force_destroy = true
 
   replication_configuration = {
-    role = aws_iam_role.replication.arn
+    # Force edge on iam role policy so graph is correct
+    role = coalesce(aws_iam_role.replication.arn, aws_iam_role_policy.replication.id)
 
     rules = [
       {
