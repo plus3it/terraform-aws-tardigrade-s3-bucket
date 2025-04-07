@@ -151,7 +151,7 @@ module "all_arguments" {
 
   # logging
   logging = {
-    target_bucket = aws_s3_bucket_acl.logging.bucket
+    target_bucket = aws_s3_bucket_policy.logging.bucket
     target_prefix = "log/"
     target_grants = null
   }
@@ -251,9 +251,24 @@ resource "aws_s3_bucket" "logging" {
   force_destroy = true
 }
 
-resource "aws_s3_bucket_acl" "logging" {
+resource "aws_s3_bucket_policy" "logging" {
   bucket = aws_s3_bucket.logging.id
-  acl    = "log-delivery-write"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "S3ServerAccessLogsPolicy",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "logging.s3.amazonaws.com"
+        },
+        "Action" : [
+          "s3:PutObject"
+        ],
+        "Resource" : "arn:aws:s3:::${aws_s3_bucket.logging.id}/*",
+      }
+    ]
+  })
 }
 
 resource "aws_s3_bucket" "replication" {
