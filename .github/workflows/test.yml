@@ -10,4 +10,4 @@ jobs:
   test:
     uses: plus3it/actions-workflows/.github/workflows/test.yml@0054f1b21931641f08f755c8115375b8099f7f6b
     with:
-      mockstacktest-pytest-args: -v -k 'not create_request_payment and not create_intelligent_tiering and not create_inventory'
+      mockstacktest-pytest-args: -v -k 'not create_request_payment and not create_intelligent_tiering and not create_inventory and not create_lifecycles'

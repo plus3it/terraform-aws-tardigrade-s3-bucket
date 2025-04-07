@@ -18,4 +18,4 @@ jobs:
     secrets:
       release-token: ${{ secrets.GH_RELEASES_TOKEN }}
     with:
-      mockstacktest-pytest-args: -v -k 'not create_request_payment and not create_intelligent_tiering and not create_inventory'
+      mockstacktest-pytest-args: -v -k 'not create_request_payment and not create_intelligent_tiering and not create_inventory and not create_lifecycles'

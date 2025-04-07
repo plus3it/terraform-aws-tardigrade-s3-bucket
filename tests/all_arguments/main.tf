@@ -103,31 +103,35 @@ module "all_arguments" {
   #   }
   # }
 
-  lifecycle_rules = [
-    {
-      id     = "transitionRule"
-      status = "Enabled"
+  # Exclude lifecycle rules until aws provider bug is resolved or moto server explicitly
+  # adds support for `transition_default_minimum_object_size`
+  # https://github.com/hashicorp/terraform-provider-aws/issues/41603
+  #
+  # lifecycle_rules = [
+  #   {
+  #     id     = "transitionRule"
+  #     status = "Enabled"
 
-      abort_incomplete_multipart_upload = {
-        days_after_initiation = 7
-      }
+  #     abort_incomplete_multipart_upload = {
+  #       days_after_initiation = 7
+  #     }
 
-      filter = {
-        prefix = "aPrefix/"
-      }
+  #     filter = {
+  #       prefix = "aPrefix/"
+  #     }
 
-      transitions = [
-        {
-          days          = 30
-          storage_class = "STANDARD_IA"
-        },
-        {
-          days          = 90
-          storage_class = "GLACIER"
-        },
-      ]
-    },
-  ]
+  #     transitions = [
+  #       {
+  #         days          = 30
+  #         storage_class = "STANDARD_IA"
+  #       },
+  #       {
+  #         days          = 90
+  #         storage_class = "GLACIER"
+  #       },
+  #     ]
+  #   },
+  # ]
 
   # logging
   logging = {
