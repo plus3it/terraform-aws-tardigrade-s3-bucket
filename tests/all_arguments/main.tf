@@ -107,7 +107,6 @@ module "all_arguments" {
     {
       id     = "transitionRule"
       status = "Enabled"
-      prefix = "aPrefix/"
 
       abort_incomplete_multipart_upload = {
         days_after_initiation = 7
