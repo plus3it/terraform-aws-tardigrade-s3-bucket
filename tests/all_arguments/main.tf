@@ -103,42 +103,32 @@ module "all_arguments" {
   #   }
   # }
 
-  # Moto currently fails when using the intelligent_tiering_configuration
-  #
-  # lifecycle_rules = [
-  #   {
-  #     id         = "transitionRule"
-  #     expiration = null
-  #     status     = "Enabled"
-  #     prefix     = "aPrefix/"
+  lifecycle_rules = [
+    {
+      id     = "transitionRule"
+      status = "Enabled"
+      prefix = "aPrefix/"
 
-  #     noncurrent_version_expiration  = null
-  #     noncurrent_version_transitions = []
+      abort_incomplete_multipart_upload = {
+        days_after_initiation = 7
+      }
 
-  #     abort_incomplete_multipart_upload = {
-  #       days_after_initiation = 7
-  #     }
+      filter = {
+        prefix = "aPrefix/"
+      }
 
-  #     filter = {
-  #       prefix                   = "aPrefix/"
-  #       tag                      = null
-  #       and                      = null
-  #       object_size_greater_than = null
-  #       object_size_less_than    = null
-  #     }
-
-  #     transitions = [{
-  #       date          = null
-  #       days          = 30
-  #       storage_class = "STANDARD_IA"
-  #       },
-  #       {
-  #         date          = null
-  #         days          = 90
-  #         storage_class = "GLACIER"
-  #     }]
-  #   },
-  # ]
+      transitions = [
+        {
+          days          = 30
+          storage_class = "STANDARD_IA"
+        },
+        {
+          days          = 90
+          storage_class = "GLACIER"
+        },
+      ]
+    },
+  ]
 
   # logging
   logging = {
