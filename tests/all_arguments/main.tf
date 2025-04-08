@@ -7,7 +7,6 @@ module "all_arguments" {
   source = "../../"
 
   bucket        = random_id.name.hex
-  acl           = null
   force_destroy = true
   versioning    = "Enabled"
 
@@ -25,16 +24,11 @@ module "all_arguments" {
         allowed_origins = ["https://s3-website-test.hashicorp.com"]
         expose_headers  = ["ETag"]
         max_age_seconds = 3000
-        id              = null
       },
       {
-        allowed_headers = null
         allowed_methods = ["GET"]
         allowed_origins = ["*"]
-        expose_headers  = null
-        max_age_seconds = null
-        id              = null
-      }
+      },
     ]
   }
 
@@ -44,16 +38,13 @@ module "all_arguments" {
       id         = data.aws_canonical_user_id.current.id
       type       = "CanonicalUser"
       permission = "READ"
-      uri        = null
     },
     {
-      id         = null
       type       = "Group"
       permission = "READ"
       uri        = "http://acs.amazonaws.com/groups/s3/LogDelivery"
     },
     {
-      id         = null
       type       = "Group"
       permission = "WRITE"
       uri        = "http://acs.amazonaws.com/groups/s3/LogDelivery"
@@ -112,62 +103,50 @@ module "all_arguments" {
   #   }
   # }
 
-  # Moto currently fails when using the intelligent_tiering_configuration
+  # Exclude lifecycle rules until aws provider bug is resolved or moto server explicitly
+  # adds support for `transition_default_minimum_object_size`
+  # https://github.com/hashicorp/terraform-provider-aws/issues/41603
   #
   # lifecycle_rules = [
   #   {
-  #     id         = "transitionRule"
-  #     expiration = null
-  #     status     = "Enabled"
-  #     prefix     = "aPrefix/"
-
-  #     noncurrent_version_expiration  = null
-  #     noncurrent_version_transitions = []
+  #     id     = "transitionRule"
+  #     status = "Enabled"
 
   #     abort_incomplete_multipart_upload = {
   #       days_after_initiation = 7
   #     }
 
   #     filter = {
-  #       prefix                   = "aPrefix/"
-  #       tag                      = null
-  #       and                      = null
-  #       object_size_greater_than = null
-  #       object_size_less_than    = null
+  #       prefix = "aPrefix/"
   #     }
 
-  #     transitions = [{
-  #       date          = null
-  #       days          = 30
-  #       storage_class = "STANDARD_IA"
+  #     transitions = [
+  #       {
+  #         days          = 30
+  #         storage_class = "STANDARD_IA"
   #       },
   #       {
-  #         date          = null
   #         days          = 90
   #         storage_class = "GLACIER"
-  #     }]
+  #       },
+  #     ]
   #   },
   # ]
 
   # logging
   logging = {
-    target_bucket = aws_s3_bucket_acl.logging.bucket
+    target_bucket = aws_s3_bucket_policy.logging.bucket
     target_prefix = "log/"
-    target_grants = null
   }
 
   # notifications
   notifications = {
-    lambda_functions = []
     topics = [
       {
-        topic_arn     = aws_sns_topic_policy.notifications.arn
-        events        = ["s3:ObjectRemoved:*"]
-        filter_prefix = null
-        filter_suffix = null
-      }
+        topic_arn = aws_sns_topic_policy.notifications.arn
+        events    = ["s3:ObjectRemoved:*"]
+      },
     ]
-    queues = []
   }
 
   # ownership_controls
@@ -195,35 +174,24 @@ module "all_arguments" {
 
   # replication_configuration
   replication_configuration = {
-    role = aws_iam_role.replication.arn
+    # Force edge on iam role policy so graph is correct
+    role = coalesce(aws_iam_role.replication.arn, aws_iam_role_policy.replication.id)
 
     rules = [
       {
         id                               = "foobar"
         delete_marker_replication_status = "Disabled"
-        priority                         = null
         status                           = "Enabled"
-        source_selection_criteria        = null
 
         destination = {
-          bucket                     = "arn:aws:s3:::${aws_s3_bucket_versioning.replication.id}"
-          storage_class              = "STANDARD"
-          access_control_translation = null
-          account                    = null
-          encryption_configuration   = null
-          metrics                    = null
-          replication_time           = null
+          bucket        = "arn:aws:s3:::${aws_s3_bucket_versioning.replication.id}"
+          storage_class = "STANDARD"
         }
 
         filter = {
-          prefix = "foo"
-          tag = {
-            key   = "Name"
-            value = "Foo"
-          }
-          and = null
+          prefix = "foo/"
         }
-      }
+      },
     ]
   }
 
@@ -251,9 +219,24 @@ resource "aws_s3_bucket" "logging" {
   force_destroy = true
 }
 
-resource "aws_s3_bucket_acl" "logging" {
+resource "aws_s3_bucket_policy" "logging" {
   bucket = aws_s3_bucket.logging.id
-  acl    = "log-delivery-write"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "S3ServerAccessLogsPolicy",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "logging.s3.amazonaws.com"
+        },
+        "Action" : [
+          "s3:PutObject"
+        ],
+        "Resource" : "arn:aws:s3:::${aws_s3_bucket.logging.id}/*",
+      }
+    ]
+  })
 }
 
 resource "aws_s3_bucket" "replication" {
@@ -291,47 +274,49 @@ resource "aws_iam_role" "replication" {
       ]
     }
   )
+}
 
-  inline_policy {
-    name = "tf-iam-role-policy-replication"
-    policy = jsonencode(
-      {
-        "Version" : "2012-10-17",
-        "Statement" : [
-          {
-            "Action" : [
-              "s3:GetReplicationConfiguration",
-              "s3:ListBucket"
-            ],
-            "Effect" : "Allow",
-            "Resource" : [
-              "arn:aws:s3:::${random_id.name.hex}"
-            ]
-          },
-          {
-            "Action" : [
-              "s3:GetObjectVersionForReplication",
-              "s3:GetObjectVersionAcl",
-              "s3:GetObjectVersionTagging"
-            ],
-            "Effect" : "Allow",
-            "Resource" : [
-              "arn:aws:s3:::${random_id.name.hex}/*"
-            ]
-          },
-          {
-            "Action" : [
-              "s3:ReplicateObject",
-              "s3:ReplicateDelete",
-              "s3:ReplicateTags"
-            ],
-            "Effect" : "Allow",
-            "Resource" : "${aws_s3_bucket.replication.arn}/*"
-          }
-        ]
-      }
-    )
-  }
+resource "aws_iam_role_policy" "replication" {
+  name = "tf-iam-role-policy-replication"
+  role = aws_iam_role.replication.id
+
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Action" : [
+            "s3:GetReplicationConfiguration",
+            "s3:ListBucket"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:s3:::${random_id.name.hex}"
+          ]
+        },
+        {
+          "Action" : [
+            "s3:GetObjectVersionForReplication",
+            "s3:GetObjectVersionAcl",
+            "s3:GetObjectVersionTagging"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:s3:::${random_id.name.hex}/*"
+          ]
+        },
+        {
+          "Action" : [
+            "s3:ReplicateObject",
+            "s3:ReplicateDelete",
+            "s3:ReplicateTags"
+          ],
+          "Effect" : "Allow",
+          "Resource" : "${aws_s3_bucket.replication.arn}/*"
+        }
+      ]
+    }
+  )
 }
 
 resource "aws_sns_topic" "notifications" {}

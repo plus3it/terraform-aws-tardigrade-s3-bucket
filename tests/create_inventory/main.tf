@@ -19,8 +19,6 @@ module "create_inventory" {
     included_object_versions = "All"
     enabled                  = true
 
-    filter = null
-
     schedule = {
       frequency = "Daily"
     }
@@ -29,8 +27,6 @@ module "create_inventory" {
       bucket = {
         format     = "ORC"
         bucket_arn = aws_s3_bucket.inventory.arn
-        account_id = null
-        prefix     = null
       }
     }
   }

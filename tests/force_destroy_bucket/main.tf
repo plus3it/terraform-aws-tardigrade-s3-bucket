@@ -14,7 +14,7 @@ module "force_destroy" {
   }
 }
 
-resource "aws_s3_bucket_object" "this" {
+resource "aws_s3_object" "this" {
   bucket = module.force_destroy.bucket.id
   key    = random_id.name.hex
   source = "${path.module}/main.tf"

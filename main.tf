@@ -13,7 +13,7 @@ resource "aws_s3_bucket_logging" "this" {
   target_prefix = var.logging.target_prefix
 
   dynamic "target_grant" {
-    for_each = var.logging.target_grants != null ? var.logging.target_grants : []
+    for_each = var.logging.target_grants
 
     content {
       grantee {
@@ -70,21 +70,21 @@ resource "aws_s3_bucket_intelligent_tiering_configuration" "this" {
   name   = var.intelligent_tiering_configuration.name
   status = var.intelligent_tiering_configuration.status
 
-  dynamic "tiering" {
-    for_each = var.intelligent_tiering_configuration.tiering
-
-    content {
-      access_tier = tiering.value.access_tier
-      days        = tiering.value.days
-    }
-  }
-
   dynamic "filter" {
     for_each = var.intelligent_tiering_configuration.filter != null ? [var.intelligent_tiering_configuration.filter] : []
 
     content {
       prefix = filter.value.prefix
       tags   = filter.value.tags
+    }
+  }
+
+  dynamic "tiering" {
+    for_each = var.intelligent_tiering_configuration.tiering
+
+    content {
+      access_tier = tiering.value.access_tier
+      days        = tiering.value.days
     }
   }
 }

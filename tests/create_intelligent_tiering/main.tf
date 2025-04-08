@@ -29,7 +29,7 @@ module "create_intelligent_tiering" {
       {
         access_tier = "ARCHIVE_ACCESS"
         days        = 125
-      }
+      },
     ]
   }
 }

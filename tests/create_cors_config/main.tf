@@ -16,16 +16,11 @@ module "create_cors_configuration" {
         allowed_origins = ["https://s3-website-test.hashicorp.com"]
         expose_headers  = ["ETag"]
         max_age_seconds = 3000
-        id              = null
       },
       {
-        allowed_headers = null
         allowed_methods = ["GET"]
         allowed_origins = ["*"]
-        expose_headers  = null
-        max_age_seconds = null
-        id              = null
-      }
+      },
     ]
   }
 }
