@@ -11,7 +11,7 @@ module "create_notifications" {
   notifications = {
     lambda_functions = [
       {
-        lambda_function_arn = "arn:${data.aws_partition.current.partition}:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${aws_lambda_permission.this.function_name}"
+        lambda_function_arn = "arn:${data.aws_partition.current.partition}:lambda:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:function:${aws_lambda_permission.this.function_name}"
         events              = ["s3:ObjectCreated:*"]
       },
     ]
@@ -70,7 +70,7 @@ resource "aws_sqs_queue" "this" {
     account_id  = data.aws_caller_identity.current.account_id
     bucket_name = random_id.name.hex
     partition   = data.aws_partition.current.partition
-    queue_arn   = "arn:${data.aws_partition.current.partition}:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${random_id.name.hex}"
+    queue_arn   = "arn:${data.aws_partition.current.partition}:sqs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${random_id.name.hex}"
   })
 }
 
