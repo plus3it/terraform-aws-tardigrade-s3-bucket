@@ -35,7 +35,7 @@ module "create_notifications" {
 }
 
 module "lambda" {
-  source = "git::https://github.com/plus3it/terraform-aws-lambda.git?ref=v1.3.0"
+  source = "git::https://github.com/plus3it/terraform-aws-lambda.git?ref=v8.7.0"
 
   function_name = random_id.name.hex
   handler       = "lambda.handler"
@@ -45,7 +45,7 @@ module "lambda" {
 
 resource "aws_lambda_permission" "this" {
   action         = "lambda:InvokeFunction"
-  function_name  = module.lambda.function_name
+  function_name  = module.lambda.lambda_function_name
   principal      = "s3.amazonaws.com"
   source_arn     = "arn:${data.aws_partition.current.partition}:s3:::${random_id.name.hex}"
   source_account = data.aws_caller_identity.current.account_id
