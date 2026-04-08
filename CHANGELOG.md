@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+### [5.2.0](https://github.com/plus3it/terraform-aws-tardigrade-s3-bucket/releases/tag/5.2.0)
+
+**Released**: 2026.04.08
+
+**Summary**:
+
+*   Matches AWS new default to block SSE-C encryption type. This addresses persistent
+    drift that occurs when this attribute is unset.
+
 ### [5.1.0](https://github.com/plus3it/terraform-aws-tardigrade-s3-bucket/releases/tag/5.1.0)
 
 **Released**: 2025.04.08
