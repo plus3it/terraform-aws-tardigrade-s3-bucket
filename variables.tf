@@ -242,9 +242,10 @@ variable "public_access_block" {
 variable "server_side_encryption_configuration" {
   description = "Schema object of the server side encryption configuration"
   type = object({
-    bucket_key_enabled = optional(bool, true)
-    kms_master_key_id  = optional(string)
-    sse_algorithm      = optional(string, "aws:kms")
+    blocked_encryption_types = optional(list(string), ["SSE-C"])
+    bucket_key_enabled       = optional(bool, true)
+    kms_master_key_id        = optional(string)
+    sse_algorithm            = optional(string, "aws:kms")
   })
   default = {}
 }
